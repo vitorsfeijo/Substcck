@@ -45,6 +45,6 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     port,
     corsOrigins,
     databaseUrl: env.DATABASE_URL || undefined,
-    dataDir: env.PGLITE_DATA_DIR || './data/development',
+    dataDir: env.PGLITE_DATA_DIR || './.cache/data/dev',
   };
 }

@@ -1,11 +1,6 @@
 node_modules
 .git
 .env*
-data
-dist
-build
 *.pdf
-images
+docs
 .cache
-playwright-report
-test-results

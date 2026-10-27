@@ -2,7 +2,7 @@
 
 ## 1. Origem e critérios de fidelidade
 
-Documento baseado em [Desafio Engenharia Software](Desafio_Engenharia_Software.pdf), com 17 páginas, da disciplina **INF01127 - Engenharia de Software N**, trabalho prático de Engenharia de Software do Instituto de Informática da UFRGS.
+Documento baseado em [Desafio Engenharia Software](references/Desafio_Engenharia_Software.pdf), com 17 páginas, da disciplina **INF01127 - Engenharia de Software N**, trabalho prático de Engenharia de Software do Instituto de Informática da UFRGS.
 
 **Autores:** Andriele Joras dos Santos (594861), Gabriel Pieruccini Knopp (594975) e Vitor Feijó (588403). **Professora:** Leticia Santos Machado.
 
@@ -555,7 +555,7 @@ Os autores declaram ter avaliado as saídas, conferindo aderência aos requisito
 
 ### 13.6. Inventário completo
 
-| Arquivo em `images/spec/`           | Página | Conteúdo                      | Resolução extraída |
+| Arquivo em `docs/images/spec/`      | Página | Conteúdo                      | Resolução extraída |
 | ----------------------------------- | ------ | ----------------------------- | ------------------ |
 | `logo_inf_ufrgs.png`                | 1      | Logotipo institucional        | 378 × 270          |
 | `figura_01_pesquisa_alunos_inf.png` | 1      | Figura 1: gráfico de pesquisa | 2048 × 1041        |
@@ -609,7 +609,7 @@ Estas observações preservam os limites da fonte. Não representam alterações
 
 ## 16. Requisito adicional - Site no GitHub com CI/CD
 
-**Origem:** orientação do usuário posterior à elaboração da especificação do PDF. Esta seção define a direção de entrega do projeto; o estado real de implementação e publicação é registrado em [DELIVERY_M0.md](docs/DELIVERY_M0.md).
+**Origem:** orientação do usuário posterior à elaboração da especificação do PDF. Esta seção define a direção de entrega do projeto; o estado real de implementação e publicação é registrado em [DELIVERY_M0.md](DELIVERY_M0.md).
 
 ### 16.1. Forma de entrega e arquitetura
 

@@ -5,7 +5,7 @@ import type { Database } from './database.js';
 
 export async function migrate(
   db: Database,
-  directory = resolve('db/migrations'),
+  directory = resolve('server/db/migrations'),
 ) {
   await db.exec(`CREATE TABLE IF NOT EXISTS schema_migrations (
     name TEXT PRIMARY KEY,

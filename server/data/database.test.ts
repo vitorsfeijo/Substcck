@@ -11,7 +11,7 @@ it('applies once, persists across reopening, rejects changed migrations and roll
   const migrations = join(root, 'migrations');
   await mkdir(migrations);
   const firstMigration = await readFile(
-    resolve('db/migrations/001_platform.sql'),
+    resolve('server/db/migrations/001_platform.sql'),
     'utf8',
   );
   await writeFile(join(migrations, '001_platform.sql'), firstMigration);

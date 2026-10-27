@@ -31,7 +31,7 @@ Opcionalmente copie `.env.example` para `.env` e ajuste as variáveis. A ausênc
 | `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                 |
 | `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                 |
 | `npm test`                            | Testes de API, configuração, persistência e migrações.                               |
-| `npm run build` / `npm run build:api` | Gerar `dist/` estático e `build/` da API, respectivamente.                           |
+| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.    |
 | `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                   |
 | `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                  |
 | `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                        |
@@ -42,22 +42,26 @@ Antes do primeiro teste de navegador, execute `npx playwright install chromium`.
 ## Estrutura
 
 ```text
-src/                     interface, configuração pública e cliente HTTP
-server/controllers/      contratos HTTP
-server/services/         orquestração da saúde da aplicação
-server/repositories/     leitura dos metadados da plataforma
-server/models/           contratos do backend
+web/                     frontend: index.html, componentes, estilos e cliente HTTP
+server/                  backend: controllers, serviços, repositórios e modelos
 server/data/             adaptadores PostgreSQL/PGlite e executor de migrações
-db/migrations/           SQL versionado
+server/db/migrations/    SQL versionado
+config/                  configurações de TypeScript, Vite, Vitest e Playwright
+infra/                   Dockerfile e Blueprint do Render
 tests/e2e/               fluxos de navegador
 scripts/                 verificações dos artefatos e da publicação
-docs/                    decisões, rastreabilidade e execução
+docs/                    especificação, plano, decisões e guias
+docs/references/         PDF original do desafio
+docs/images/spec/        imagens e diagramas extraídos do PDF
 .github/workflows/       CI e deploy Pages
+.cache/                  builds, banco local e resultados de testes ignorados
 ```
+
+Os comandos npm continuam sendo executados na raiz e as URLs locais e públicas permanecem iguais. `config/` agrupa as configurações explicitamente referenciadas pelos scripts; arquivos necessários à descoberta automática das ferramentas, como `eslint.config.js` e `.prettierrc.json`, permanecem na raiz.
 
 ## Banco e migrações
 
-Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./data/development`, ignorado pelo Git. A migração `001_platform.sql` cria apenas metadados de plataforma. Tabelas de usuários/TCCs são parte do M1, não deste marco.
+Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`; `001_platform.sql` cria apenas metadados de plataforma. Tabelas de usuários/TCCs são parte do M1, não deste marco.
 
 Migrações são ordenadas por nome e registradas com checksum, em transações. Reexecutar não duplica operações; alterar uma migração já aplicada falha explicitamente. Crie outro arquivo SQL para evoluir o esquema. A tabela de migrações é bloqueada durante aplicação para serializar executores; no provisionamento inicial, execute um único processo de migração.
 
@@ -82,7 +86,9 @@ Banco inacessível ou não migrado resulta em HTTP 503 e estados `unavailable`, 
 
 ## Backend externo preparado, sem provisionamento
 
-O `Dockerfile` compila e inicia a API como usuário sem privilégios, aplica migrações e usa a porta de `PORT`. `render.yaml` descreve o destino escolhido no Render com deploy automático desativado; não cria serviços sozinho.
+O `infra/Dockerfile` compila e inicia a API como usuário sem privilégios, aplica migrações de `server/db/migrations/` e usa a porta de `PORT`. Para gerar a imagem a partir da raiz, use `docker build -f infra/Dockerfile .`. `infra/render.yaml` descreve o destino escolhido no Render com deploy automático desativado; não cria serviços sozinho.
+
+Ao criar o Blueprint no Render, selecione `infra/render.yaml` no campo **Blueprint Path**. Para um Blueprint existente, ajuste esse caminho em **Settings**. O caminho personalizado é configurado no Render; não há um segundo `render.yaml` na raiz para descoberta padrão. Esse fluxo é descrito na [documentação oficial de Blueprints](https://render.com/docs/infrastructure-as-code).
 
 Para ativar futuramente: provisionar PostgreSQL no Neon, criar o serviço Render a partir deste repositório, fornecer `DATABASE_URL` apenas ao backend e manter `CORS_ORIGINS=https://vitorsfeijo.github.io`. Validar `/api/health` e definir `VITE_API_URL=https://<host-real>/api` nas variáveis públicas do Actions, seguido de novo deploy do frontend. Não há credenciais desses provedores configuradas nesta entrega; não se presume gratuidade. R2 e autenticação são integrações futuras.
 

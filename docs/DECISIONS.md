@@ -1,6 +1,6 @@
 # Decisões iniciais de implementação
 
-Este registro resolve os contratos iniciais de T02 a T05 do [plano](../IMPLEMENTATION_PLAN.md). A [especificação](../SPEC.md) preserva o PDF; as escolhas abaixo são decisões de engenharia do projeto e não exigências atribuídas aos autores do desafio.
+Este registro resolve os contratos iniciais de T02 a T05 do [plano](IMPLEMENTATION_PLAN.md). A [especificação](SPEC.md) preserva o PDF; as escolhas abaixo são decisões de engenharia do projeto e não exigências atribuídas aos autores do desafio.
 
 ## 1. Recorte de M0
 

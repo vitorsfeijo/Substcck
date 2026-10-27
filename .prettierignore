@@ -1,11 +1,5 @@
 package-lock.json
 node_modules
-dist
-build
-/data/
-coverage
-playwright-report
-test-results
-images
+docs/images
 *.pdf
 .cache

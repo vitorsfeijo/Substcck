@@ -29,7 +29,7 @@ export function assetPaths(html) {
 }
 
 export async function checkPages(
-  directory = 'dist',
+  directory = '.cache/build/web',
   basePath = process.env.VITE_BASE_PATH || '/Subtccstack/',
 ) {
   const base = normalizeBase(basePath);

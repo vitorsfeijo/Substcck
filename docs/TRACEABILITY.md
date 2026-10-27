@@ -1,6 +1,6 @@
 # Rastreabilidade de requisitos e entregas
 
-Este registro atende T01 do [plano de implementação](../IMPLEMENTATION_PLAN.md). Os identificadores RF, US, UC e CT vêm da [especificação](../SPEC.md); GH01-GH11 são os requisitos adicionais de GitHub Pages/Actions definidos pelo usuário. As [decisões iniciais](DECISIONS.md) resolvem os contratos de T02-T05.
+Este registro atende T01 do [plano de implementação](IMPLEMENTATION_PLAN.md). Os identificadores RF, US, UC e CT vêm da [especificação](SPEC.md); GH01-GH11 são os requisitos adicionais de GitHub Pages/Actions definidos pelo usuário. As [decisões iniciais](DECISIONS.md) resolvem os contratos de T02-T05.
 
 As relações abaixo indicam onde cada requisito será entregue e como será verificado. Não são uma declaração antecipada de que o recurso já funciona. M0 cobre T01-T13; o checklist do plano e o registro de evidências de execução devem indicar a conclusão real de cada tarefa.
 

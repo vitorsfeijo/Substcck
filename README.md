@@ -22,10 +22,12 @@ Abra `http://127.0.0.1:5173/Subtccstack/`. Para validar: `npx playwright install
 
 ## Documentação
 
-- [Especificação](SPEC.md): requisitos, fluxos, diagramas e testes extraídos do desafio.
-- [Plano de implementação](IMPLEMENTATION_PLAN.md): 60 tarefas com dependências e critérios de conclusão, incluindo CI/CD e publicação.
-- [Desafio original](Desafio_Engenharia_Software.pdf): documento de referência.
-- [Imagens da especificação](images/spec/): figuras e diagramas extraídos do PDF.
+- [Especificação](docs/SPEC.md): requisitos, fluxos, diagramas e testes extraídos do desafio.
+- [Plano de implementação](docs/IMPLEMENTATION_PLAN.md): 60 tarefas com dependências e critérios de conclusão, incluindo CI/CD e publicação.
+- [Desafio original](docs/references/Desafio_Engenharia_Software.pdf): documento de referência.
+- [Imagens da especificação](docs/images/spec): figuras e diagramas extraídos do PDF.
 - [Desenvolvimento](docs/DEVELOPMENT.md), [decisões](docs/DECISIONS.md), [rastreabilidade](docs/TRACEABILITY.md) e [publicação](docs/DEPLOYMENT.md).
 
 O banco local roda no servidor, com PGlite; dados e credenciais não são incorporados ao site.
+
+O código está em `web/` e `server/`; configurações em `config/`, infraestrutura em `infra/` e documentação em `docs/`. Arquivos gerados ficam em `.cache/`.
