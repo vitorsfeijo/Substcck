@@ -6,7 +6,15 @@
 - T06-T08: frontend React/TypeScript, API Fastify de saúde com controller/service/repository/model, adaptadores PostgreSQL/PGlite e migração transacional com checksum.
 - T09-T10: comandos de validação, artefato estático sob `/Subtccstack/`, navegação em hash e configuração pública separada.
 - T11-T12: CI reutilizável em PR/push e deploy Pages condicionado à validação da mesma revisão, com permissões restritas e checagem pós-deploy.
-- T13: publicação em preparação; será concluída somente após confirmação da execução e da URL.
+- T13: GitHub Pages habilitado com origem Actions e HTTPS; primeira publicação confirmada.
+
+## Publicação confirmada
+
+- Site: [Subtccstack](https://vitorsfeijo.github.io/Subtccstack/).
+- Revisão inicial: `19bb0c497aae59a416e47014362cbbb81f8774b3`.
+- [CI inicial bem-sucedido](https://github.com/vitorsfeijo/Subtccstack/actions/runs/40576576470).
+- [Deploy inicial e smoke check bem-sucedidos](https://github.com/vitorsfeijo/Subtccstack/actions/runs/40576576264).
+- A URL pública foi conferida também fora do workflow: HTML, JavaScript e CSS disponíveis; interface renderizada e navegação/recarregamento por hash funcionando, sem exceções no navegador.
 
 ## Evidência local
 
@@ -14,6 +22,7 @@ Validação executada em 27/10/2026, com Node.js 24:
 
 - ESLint, Prettier e TypeScript passaram.
 - 5 testes de API/configuração/persistência/migração passaram.
+- A revisão inclui normalização de finais de linha do SQL e arquivos de banco corretamente versionados para execução em Windows e Linux; a mesma validação passou no runner Linux do GitHub Actions.
 - Prova de persistência gravou, fechou, reabriu e leu o banco local.
 - Builds do frontend e backend passaram; artefato estático contém somente HTML, CSS e JavaScript esperados.
 - 10 testes de navegador passaram: cinco cenários em desktop e celular, incluindo prefixo, hash/reload, foco/teclado e ausência de overflow.

@@ -2,7 +2,7 @@
 
 ## Estado e destino
 
-O frontend gera arquivos estáticos para o GitHub Pages. O endereço previsto para o repositório atual é `https://vitorsfeijo.github.io/Subtccstack/`. Este endereço só representa uma entrega confirmada após uma execução bem-sucedida de **Deploy Pages** e da verificação pós-deploy. A existência dos workflows, isoladamente, não comprova publicação.
+O frontend gera arquivos estáticos para o GitHub Pages. O M0 está publicado em [vitorsfeijo.github.io/Subtccstack](https://vitorsfeijo.github.io/Subtccstack/), com CI, deploy e verificação pós-deploy bem-sucedidos. As evidências estão em [DELIVERY_M0.md](DELIVERY_M0.md). Para versões futuras, a existência dos workflows, isoladamente, não comprova uma nova publicação.
 
 API, banco, autenticação institucional e armazenamento são serviços externos ao Pages. Consulte [DECISIONS.md](DECISIONS.md). Sem a variável pública de API, o frontend continua acessível e informa a ausência de integração; não simula um banco compartilhado nem autenticação real.
 

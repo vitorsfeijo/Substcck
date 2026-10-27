@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** T01-T12 implementadas e verificadas localmente. T13 aguarda confirmação da primeira publicação no Pages. Veja [a entrega M0](docs/DELIVERY_M0.md) para evidências e limites; T14 em diante permanecem pendentes.
+**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](docs/DELIVERY_M0.md) para evidências e limites; T14 em diante permanecem pendentes.
 
 ### Regras para manter as entregas pequenas
 
@@ -119,11 +119,11 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T13 - Habilitar Pages e verificar a primeira publicação
 
-- [ ] Configurar Pages com origem GitHub Actions; publicar o frontend mínimo e verificar a URL, o prefixo e os assets após o deploy.
+- [x] Configurar Pages com origem GitHub Actions; publicar o frontend mínimo e verificar a URL, o prefixo e os assets após o deploy.
 - **Conclusão:** primeira execução de CI/deploy é bem-sucedida e o frontend abre no endereço real. O site mínimo comprova a infraestrutura, ainda sem declarar os fluxos de negócio implementados.
 - **Dependências:** T12. **Requisitos:** GH08 e GH10.
 
-**Saída da etapa / M0:** projeto inicia de forma reproduzível, gera build estático e publica o frontend mínimo no Pages via Actions. Implementação local e workflows concluídos; a publicação é acompanhada em [DELIVERY_M0.md](docs/DELIVERY_M0.md).
+**Saída da etapa / M0:** concluída. Projeto inicia de forma reproduzível, gera build estático e publica o frontend mínimo no Pages via Actions. Evidências locais, de CI e da URL pública estão em [DELIVERY_M0.md](docs/DELIVERY_M0.md).
 
 ## 4. Etapa 3 - Autenticação e autorização
 

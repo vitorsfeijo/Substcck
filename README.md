@@ -2,7 +2,9 @@
 
 Proposta de plataforma mobile/web para divulgar, buscar e relacionar TCCs do Instituto de Informática da UFRGS, com resumos acessíveis, imagens e classificação por tags e áreas.
 
-**Status:** M0 implementado; primeira publicação em validação. Frontend responsivo, API de saúde, banco local persistente e CI/CD configurados. Cadastro, login e busca serão desenvolvidos nos próximos marcos.
+**Site:** [vitorsfeijo.github.io/Subtccstack](https://vitorsfeijo.github.io/Subtccstack/).
+
+**Status:** M0 concluído e publicado. Frontend responsivo, API de saúde, banco local persistente e CI/CD verificados. Cadastro, login e busca serão desenvolvidos nos próximos marcos.
 
 **Stack:** React + TypeScript + Vite; API Node.js/Fastify; PostgreSQL. Frontend no GitHub Pages, com CI/CD pelo GitHub Actions. Backend de produção ainda não provisionado.
 
