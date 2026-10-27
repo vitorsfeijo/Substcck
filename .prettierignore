@@ -1,0 +1,11 @@
+package-lock.json
+node_modules
+dist
+build
+/data/
+coverage
+playwright-report
+test-results
+images
+*.pdf
+.cache

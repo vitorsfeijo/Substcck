@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: subtccstack-api
+    runtime: docker
+    healthCheckPath: /api/health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://vitorsfeijo.github.io
+      - key: DATABASE_URL
+        sync: false

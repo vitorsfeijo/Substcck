@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+    inputs:
+      upload_pages_artifact:
+        description: Package the verified frontend for the calling deployment.
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate application
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VITE_BASE_PATH: /Subtccstack/
+      VITE_API_URL: ${{ vars.VITE_API_URL || '' }}
+    steps:
+      - name: Checkout this revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Compile the backend
+        run: npm run build:api
+      - name: Unit and integration tests
+        run: npm test
+      - name: Verify migration and persistent database
+        run: npm run db:verify
+      - name: Build production frontend
+        run: npm run build
+      - name: Check Pages artifact and base path
+        run: npm run check:pages
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser tests against the production artifact
+        run: npm run test:e2e
+      - name: Package only the validated frontend
+        if: inputs.upload_pages_artifact && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: dist
+          retention-days: 1
