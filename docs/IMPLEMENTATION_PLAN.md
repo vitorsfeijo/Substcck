@@ -14,7 +14,8 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 ### Regras para manter as entregas pequenas
 
-- Executar uma tarefa numerada por vez e registrar sua conclusão; cada tarefa deve produzir um resultado revisável, preferencialmente em um commit.
+- Executar uma tarefa numerada por vez e registrar sua conclusão, fazendo commits incrementais separados por parte e responsabilidade, com mensagens descritivas de tipo e escopo.
+- Ao concluir cada marco, garantir que todas as alterações estejam commitadas e fazer push para o remoto. Acompanhar o CI/CD e corrigir falhas da entrega antes de declarar o marco concluído. Esse fluxo foi autorizado pelo usuário e está registrado em [AGENTS.md](../AGENTS.md).
 - Respeitar as dependências indicadas. Não adicionar recursos de uma fase posterior a uma tarefa anterior apenas por conveniência.
 - Registrar decisões pendentes D01 a D15 de `SPEC.md` em documento de decisões, indicando a solução adotada e a evidência de origem.
 - Usar o fluxo de sucesso e os estados de falha do PDF como base da validação.
