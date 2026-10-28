@@ -2,7 +2,7 @@
 
 ## Preparação
 
-Requisitos: Node.js 24 e npm. A execução local de M0 a M2 não exige Docker nem credenciais de nuvem.
+Requisitos: Node.js 24 e npm. A execução local de M0 a M3 não exige Docker nem credenciais de nuvem.
 
 Na raiz do checkout:
 
@@ -23,22 +23,22 @@ Opcionalmente copie `.env.example` para `.env` e ajuste as variáveis. A ausênc
 
 ## Comandos
 
-| Comando                               | Finalidade                                                                           |
-| ------------------------------------- | ------------------------------------------------------------------------------------ |
-| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                 |
-| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                     |
-| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção. |
-| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.       |
-| `npm run files:prune`                 | Remover uploads registrados sem referências e com mais de 24 horas; execução manual. |
-| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                 |
-| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                 |
-| `npm test`                            | Testes de API, configuração, persistência e migrações.                               |
-| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.    |
-| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                   |
-| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                  |
-| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                        |
-| `npm run test:e2e:auth`               | Gerar bundle isolado e validar conta/editor com respostas de API controladas.        |
-| `npm run check`                       | Executar a cadeia completa de verificações.                                          |
+| Comando                               | Finalidade                                                                                  |
+| ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                        |
+| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                            |
+| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção.        |
+| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.              |
+| `npm run files:prune`                 | Remover uploads registrados sem referências e com mais de 24 horas; execução manual.        |
+| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                        |
+| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                        |
+| `npm test`                            | Testes de API, configuração, persistência e migrações.                                      |
+| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.           |
+| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                          |
+| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                         |
+| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                               |
+| `npm run test:e2e:auth`               | Gerar bundle isolado e validar conta, editor e descoberta com respostas de API controladas. |
+| `npm run check`                       | Executar a cadeia completa de verificações.                                                 |
 
 Antes do primeiro teste de navegador, execute `npx playwright install chromium`. Em Linux CI, o workflow instala também as dependências de sistema. Testes de banco usam diretórios temporários próprios, sem dados de usuário.
 
@@ -64,7 +64,7 @@ Os comandos npm continuam sendo executados na raiz e as URLs locais e públicas 
 
 ## Banco e migrações
 
-Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso, `003_tcc_domain.sql` cria o domínio de TCC e classificação, `004_attachments.sql` registra os anexos e `005_publication_requests.sql` registra as requisições de criação idempotentes.
+Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso, `003_tcc_domain.sql` cria o domínio de TCC e classificação, `004_attachments.sql` registra os anexos, `005_publication_requests.sql` registra as requisições de criação idempotentes e `006_discovery_views.sql` cria eventos temporais de exploração, snapshot das tags e deduplicação de leitura.
 
 Migrações são ordenadas por nome e registradas com checksum, em transações. Reexecutar não duplica operações; alterar uma migração já aplicada falha explicitamente. Crie outro arquivo SQL para evoluir o esquema. A tabela de migrações é bloqueada durante aplicação para serializar executores; no provisionamento inicial, execute um único processo de migração.
 
@@ -199,7 +199,48 @@ SQL e armazenamento de objetos não compartilham uma transação distribuída. O
 
 Com a API local parada, `npm run files:prune` remove registros/objetos de uploads sem referências e com mais de 24 horas. No contêiner de produção, o comando equivalente é `node build/server/scripts/prune-attachments.js`, com as mesmas variáveis de banco e armazenamento da API. A operação reconfirma idade e ausência de vínculo sob bloqueio de linha antes de remover, e não cria cron ou automação. Ela percorre metadados elegíveis e não inventaria arquivos/objetos que eventualmente ficaram sem registro após uma interrupção do processo. Anexos vinculados são preservados.
 
-O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas para conta e editor (`auth.spec.ts` e `editor.spec.ts`). Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. As provas de conexão real UFRGS e provisionamento de backend/banco/bucket continuam pendentes, independentemente do resultado desses testes.
+O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas para conta, editor e descoberta (`auth.spec.ts`, `editor.spec.ts` e `discovery.spec.ts`). Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. As provas de conexão real UFRGS e provisionamento de backend/banco/bucket continuam pendentes, independentemente do resultado desses testes.
+
+## Descoberta, leitura e busca de M3
+
+O visitante não precisa entrar para consultar publicados. A página inicial contém recentes e tópicos em alta; `#/buscar` abre a pesquisa e `#/tcc/:id` abre a leitura. Os cards levam o parâmetro `from` para retornar ao início ou à consulta de busca preservada. O retorno aceita apenas essas rotas internas, sem redirecionar para endereço externo.
+
+Com a API local parada, execute `npm run db:migrate` e, opcionalmente, `npm run db:seed`; depois inicie `npm run dev`. O conjunto fictício A-E permite reproduzir CT03. Ano 2025, orientador Carlos Lima e tag Redes retornam somente A; Ano 2023 e Redes retornam a mensagem de nenhum resultado. Os identificadores das opções são obtidos da API, sem depender de IDs fixos em produção. A carga não cria anexos binários para os trabalhos A-E: use o editor para enviar um documento de teste quando quiser exercitar download local.
+
+### Contratos públicos
+
+| Operação                     | Resultado                                                                                                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `GET /api/feed`              | `{ recent, topics, windowDays: 30 }`, até oito recentes e oito tópicos com eventos válidos na janela.              |
+| `GET /api/discovery-options` | Autores, orientadores, anos, tags, áreas e coleções referenciados por trabalhos publicados.                        |
+| `GET /api/tccs`              | Página de resultados públicos, com `items`, `total`, `page` e `pageSize`.                                          |
+| `GET /api/tccs/:id`          | Detalhe completo de publicado; ID de rascunho ou inexistente retorna 404.                                          |
+| `POST /api/tccs/:id/views`   | Corpo `{}`; registra leitura e retorna `{ counted: boolean }`, exigindo origem permitida.                          |
+| `GET /api/attachments/:id`   | Imagem ou documento público somente quando vinculado a publicado; continuam válidas as regras privadas de autoria. |
+
+`GET /api/tccs` aceita `term`, `year`, `semester`, `dateFrom`, `dateTo`, `authorId`, `advisorId`, `tagIds`, `areaIds`, `collectionId`, `page` e `pageSize`. Datas usam `AAAA-MM-DD`; listas de IDs usam vírgula. O servidor combina dimensões diferentes por AND, exige todas as tags selecionadas e aceita qualquer uma das áreas selecionadas. Autor e orientador são critérios independentes. A consulta textual compara título, resumo e nomes de autor/orientador sem distinguir caixa e acentos. A ordenação é defesa decrescente, publicação decrescente e ID para desempate.
+
+O formulário conserva os critérios na query de `#/buscar`; recarregar, voltar da leitura e mudar de página mantém a consulta. A interface usa 12 resultados por página por padrão; a API usa 20 quando não informado e aceita no máximo 100. Carregamento, vazio, erro recuperável e ausência de API configurada possuem estados próprios. A mensagem de consulta vazia é:
+
+> Nenhum trabalho encontrado para os critérios informados. Tente ajustar ou remover alguns filtros.
+
+### Documento e recuperação de falhas
+
+Com anexo, **Baixar Artigo** busca o binário autorizado na API, confere resposta, formato/tamanho e usa o nome original sanitizado. Uma falha preserva a leitura e oferece nova tentativa com a mensagem:
+
+> Ocorreu um erro durante o download, verifique a sua conexão com a internet e tente novamente.
+
+Sem anexo, a página oferece **Abrir documento no LUME** para a referência HTTPS oficial. Isso é navegação externa, não um download realizado pela aplicação. Não há scraping nem URL de arquivo inventada. Imagens e documentos não são incorporados ao build do Pages.
+
+### Eventos e tópicos em alta
+
+O GET de detalhe fornece um cookie visitante de sessão antes do registro da leitura. Seu valor opaco não contém usuário ou matrícula; a tabela de deduplicação armazena apenas o hash por TCC e o instante da última leitura contada. Não há fingerprint por IP nem vínculo com o ID da conta. O cookie é `HttpOnly`, sem duração persistente explícita; em produção usa `Secure`, `SameSite=None` e prefixo `__Host-`, e localmente usa `SameSite=Lax`.
+
+Repetições da mesma sessão/TCC dentro de 30 minutos não contam novamente. Deduplicação, evento UTC, snapshot das tags e contador total são gravados na mesma transação. O ranking soma eventos dos últimos 30 dias até o instante atual e exclui rascunhos; o contador total não substitui essa janela. Editar tags não altera o snapshot de eventos antigos. A leitura continua disponível mesmo quando o registro da métrica falha.
+
+Se o navegador bloquear cookies entre Pages e API em sites distintos, não é possível garantir essa deduplicação entre requisições. Não se substitui o cookie por fingerprint ou identidade do usuário. Validar a política do navegador na implantação ou usar domínios que permitam a sessão conforme a arquitetura escolhida. Os tópicos refletem eventos sob essa política, não uma contagem de pessoas únicas.
+
+O bundle isolado de `test:e2e:auth` cobre conta, editor e descoberta com respostas de API controladas, sem ser publicado no Pages. Os testes de repositório/API executam SQL real em PGlite com dados fictícios. Testes controlados de LUME ou armazenamento não comprovam seus provedores externos; a entrega deve registrar separadamente qualquer percurso integrado com API, banco e arquivos locais reais, sem interceptação HTTP.
 
 ## Backend externo preparado, sem provisionamento
 

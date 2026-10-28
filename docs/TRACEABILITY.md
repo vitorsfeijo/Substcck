@@ -95,3 +95,16 @@ A existência dessas dependências não retira o comportamento do escopo. O regi
 | CI/CD de M2 | GH01-GH08/GH10, no recorte do frontend | Verificações da revisão enviada, bundle de teste separado do artefato público e confirmação do deploy antes de fechar o marco.            |
 
 CT01 e CT02 foram exercitados pela API e pela interface com respostas controladas do LUME. As 94 execuções aprovadas, o percurso com API/banco/arquivos locais reais e os resultados de CI/deploy estão registrados em [DELIVERY_M2.md](DELIVERY_M2.md), com as limitações dos serviços externos explícitas. A integração de leitura/feed/busca completa na interface permanece em M3.
+
+## 8. Evidência a consolidar no fechamento de M3
+
+| Tarefas     | Requisitos/casos relacionados          | Implementação a verificar                                                                                                                                 |
+| ----------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T36-T37     | RF#01; RF#02; US#04; UC04/UC05         | Detalhe público completo, rascunho inacessível, leitura responsiva e retorno ao feed/consulta preservada.                                                 |
+| T38         | UC04 FA02; D05                         | Download com nome/formato corretos, falha recuperável e link LUME explícito quando não há anexo.                                                          |
+| T39-T41     | RF#02; RN13; D07/D13                   | Recentes por defesa/publicação/ID; eventos UTC e ranking dos últimos 30 dias; deduplicação em 30 minutos e cards com estados de carregamento/vazio/falha. |
+| T42-T44     | US#04; UC04; RN12; D10                 | Texto normalizado, autor/orientador independentes, AND entre dimensões/tags, OR entre áreas e coleção funcional.                                          |
+| T45-T46     | US#04; UC04 FA01; CT03                 | Critérios e paginação na URL, resultados em feed, cenário A-E e consulta 2023 + Redes vazia com mensagem exata.                                           |
+| CI/CD de M3 | GH01-GH08/GH10, no recorte do frontend | Regressão dos marcos anteriores, bundle de teste separado e confirmação de publicação da revisão validada.                                                |
+
+As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY_M3.md). O fechamento acrescentará contagens verificadas e evidências de API/SQL/arquivos locais reais e de CI/deploy; testes controlados não atestam os serviços externos. Busca semântica e conexões permanecem em T47-T52.

@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0, M1 e M2 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md) e [DELIVERY_M2.md](DELIVERY_M2.md). T01-T35 implementadas e verificadas localmente e pelo CI/CD; T36 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
+**Estado atual:** M0, M1 e M2 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md) e [DELIVERY_M2.md](DELIVERY_M2.md). M3: T36-T46 implementadas e validadas localmente; fechamento remoto em acompanhamento em [DELIVERY_M3.md](DELIVERY_M3.md). T47 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -284,37 +284,37 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T36 - Implementar consulta pública de detalhes
 
-- [ ] Expor metadados, resumo, autores/orientadores, tags, imagens, link LUME e disponibilidade de arquivo de um TCC publicado.
+- [x] Expor metadados, resumo, autores/orientadores, tags, imagens, link LUME e disponibilidade de arquivo de um TCC publicado.
 - **Conclusão:** UC05 lê todos os dados relevantes; ID de rascunho não entrega detalhe nem anexos a terceiros.
 - **Dependências:** T21, T22 e T30.
 
 ### T37 - Construir a página de leitura
 
-- [ ] Criar página de detalhe focada em leitura, com imagens e acesso ao documento oficial, mantendo navegação de volta à descoberta.
+- [x] Criar página de detalhe focada em leitura, com imagens e acesso ao documento oficial, mantendo navegação de volta à descoberta.
 - **Conclusão:** clicar em um TCC abre conteúdo conforme US#04/UC04; layout é legível em celular e desktop, sem paywall.
 - **Dependências:** T36.
 
 ### T38 - Implementar download e recuperação de erro
 
-- [ ] Entregar o arquivo correto com nome/formato adequados e aplicar a decisão de T05 quando não houver anexo; conectar “Baixar Artigo”.
+- [x] Entregar o arquivo correto com nome/formato adequados e aplicar a decisão de T05 quando não houver anexo; conectar “Baixar Artigo”.
 - **Conclusão:** arquivos publicados podem ser baixados; erro mostra a mensagem de UC04 FA02 e permite repetir; TCC sem anexo não apresenta ação quebrada.
 - **Dependências:** T29, T36 e T37. **Lacuna:** D05.
 
 ### T39 - Implementar consulta de trabalhos recentes
 
-- [ ] Recuperar apenas publicados, com ordenação e desempate conforme a definição de defesa/recência registrada em D07.
+- [x] Recuperar apenas publicados, com ordenação e desempate conforme a definição de defesa/recência registrada em D07.
 - **Conclusão:** um conjunto com datas/semestres diferentes retorna a ordem prevista e nunca inclui rascunhos.
 - **Dependências:** T18, T21 e T25.
 
 ### T40 - Registrar exploração e calcular tópicos em alta
 
-- [ ] Implementar os eventos/dados e a consulta por período definidos para popularidade; aproveitar `visualizacoes` quando pertinente sem pressupor que o contador total resolve uma janela temporal.
+- [x] Implementar os eventos/dados e a consulta por período definidos para popularidade; aproveitar `visualizacoes` quando pertinente sem pressupor que o contador total resolve uma janela temporal.
 - **Conclusão:** janela e fórmula são documentadas; dados de exemplo produzem o ranking esperado e excluem rascunhos; não é necessário criar um painel analítico novo.
 - **Dependências:** T05, T19 e T36. **Lacunas:** D07 e D13.
 
 ### T41 - Montar o feed inicial
 
-- [ ] Integrar trabalhos recentes e tópicos em alta em cards visuais, com imagem quando disponível e acesso à leitura/filtro por tag.
+- [x] Integrar trabalhos recentes e tópicos em alta em cards visuais, com imagem quando disponível e acesso à leitura/filtro por tag.
 - **Conclusão:** RF#02 é demonstrável; feed vazio, carregamento e erro têm estados utilizáveis; os trabalhos são visualmente separados.
 - **Dependências:** T37, T39 e T40.
 
@@ -324,35 +324,35 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T42 - Implementar pesquisa textual básica
 
-- [ ] Pesquisar os campos textuais definidos, incluindo a identificação do autor/orientando; registrar normalização e ordenação adotadas.
+- [x] Pesquisar os campos textuais definidos, incluindo a identificação do autor/orientando; registrar normalização e ordenação adotadas.
 - **Conclusão:** termos retornam trabalhos publicados relevantes e o nome do orientando encontra seus trabalhos, conforme US#04.
 - **Dependências:** T21 e T22.
 
 ### T43 - Implementar filtros de ano/data, autor e orientador
 
-- [ ] Aplicar os filtros estruturados com interseção de condições e o recorte temporal definido.
+- [x] Aplicar os filtros estruturados com interseção de condições e o recorte temporal definido.
 - **Conclusão:** autor e orientador são critérios independentes; cada filtro reduz corretamente os resultados e pode ser combinado com o termo.
 - **Dependências:** T05 e T42.
 
 ### T44 - Implementar filtros de tags, áreas e coleções
 
-- [ ] Conectar classificação aos filtros restantes e à semântica de seleção múltipla definida em D10.
+- [x] Conectar classificação aos filtros restantes e à semântica de seleção múltipla definida em D10.
 - **Conclusão:** nenhuma opção prevista é apenas decorativa; combinações distintas seguem a política registrada e excluem rascunhos.
 - **Dependências:** T19 e T43.
 
 ### T45 - Construir a tela “Buscar TCC”
 
-- [ ] Apresentar barra de pesquisa, controles de filtro e “Pesquisar”, retornando os resultados em feed e permitindo limpar/ajustar a consulta.
+- [x] Apresentar barra de pesquisa, controles de filtro e “Pesquisar”, retornando os resultados em feed e permitindo limpar/ajustar a consulta.
 - **Conclusão:** seleção combinada é compreensível em celular e desktop e abrir resultado leva à página de leitura.
 - **Dependências:** T37, T41 e T44.
 
 ### T46 - Tratar consulta vazia e validar CT03
 
-- [ ] Integrar a mensagem exata de UC04 FA01; executar cenário A-E e a variação com ano 2023.
+- [x] Integrar a mensagem exata de UC04 FA01; executar cenário A-E e a variação com ano 2023.
 - **Conclusão:** 2025 + Carlos Lima + Redes retorna apenas A; 2023 + Redes retorna a mensagem e permite pesquisar novamente.
 - **Dependências:** T22 e T45.
 
-**Saída da etapa / M3:** fluxo completo UC04 demonstrável com filtros, detalhe e download, além de CT01 a CT03 disponíveis como regressão.
+**Saída da etapa / M3:** UC04 validado localmente com filtros, detalhe e download, além de CT01 a CT03 como regressão. Feed, ranking temporal, privacidade e recuperação de falhas verificados; CI/deploy da revisão enviada em acompanhamento. Veja [DELIVERY_M3.md](DELIVERY_M3.md).
 
 ## 11. Etapa 10 - Trabalhos conexos e busca semântica
 

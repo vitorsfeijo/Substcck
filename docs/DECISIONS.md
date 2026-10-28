@@ -143,23 +143,29 @@ Aliases ou hostnames adicionais só entram depois de confirmados pela equipe e a
 
 ### Busca e classificação
 
-- Consulta textual inicial em título, resumo, nome do autor/orientando e nome de orientador; comparação normalizada sem diferenciar caixa e acentos. Ordenação inicial por data de defesa decrescente e identificador para desempate.
+- Consulta textual inicial em título, resumo, nome do autor/orientando e nome de orientador; comparação normalizada sem diferenciar caixa e acentos. Ordenação por data de defesa decrescente, publicação decrescente e identificador para desempate, compartilhada com a consulta de recentes.
 - Filtros disponíveis: intervalo de data de defesa, ano, semestre, autor, orientador, tags, áreas e coleção. Todos os critérios de dimensões diferentes são combinados com **AND**.
 - Múltiplas tags selecionadas também usam **AND**: o TCC deve ter todas. Múltiplas áreas selecionadas usam OR dentro da dimensão, pois um trabalho pode atingir uma área por qualquer tag; documentar esse comportamento no controle da interface.
 - Autor/orientando e orientador são filtros separados. Um nome de professor não substitui automaticamente um filtro de autor.
 - Retornar apenas publicados em busca pública, detalhe, feed, anexos públicos e trabalhos conexos. Acesso privado ao rascunho usa operação do autor autenticado.
 - Listagens paginadas, limite padrão 20 e máximo 100 por página; resposta contém itens e metadados de paginação. Ordenação deve ser estável para um conjunto de dados inalterado.
+- Na interface de M3, a pesquisa usa 12 itens por página por padrão. Critérios e página ficam na query de `#/buscar`, permitindo abertura direta, recarregamento e retorno da leitura com a consulta preservada. As opções de autor, orientador, ano e classificação são derivadas somente de trabalhos publicados.
 
 ### Feed
 
 - **Recentes:** `dataDefesa` decrescente, seguida de `publishedAt` e identificador para desempate; `publishedAt` não substitui a data real da defesa.
 - **Tópicos em alta:** quantidade de visualizações válidas de trabalhos publicados por tag nos últimos 30 dias corridos, usando eventos com instante UTC; desempate pelo nome normalizado da tag. Uma visualização de um trabalho conta uma vez para cada tag desse trabalho.
 - Repetições na mesma sessão para o mesmo trabalho em 30 minutos não incrementam novamente o ranking. O contador total de visualizações e os eventos temporais têm funções distintas.
+- Em M3, o GET do detalhe público entrega um cookie de sessão visitante opaco antes do POST de leitura, cobrindo também acesso por link direto. O cookie é `HttpOnly`, sem `Max-Age`, com `SameSite=Lax` localmente e `Secure; SameSite=None; Path=/` em produção. A persistência de deduplicação guarda apenas seu hash por TCC, sem endereço IP, fingerprint ou associação ao identificador da conta.
+- O POST aceita apenas uma origem explicitamente configurada. Deduplicação, evento, snapshot de tags e incremento do contador total são gravados em uma transação. Uma falha desfaz o conjunto e permite repetir sem deixar contagem parcial.
+- As tags são capturadas no instante do evento: editar a classificação de um TCC não reclassifica retroativamente suas leituras antigas. O ranking considera eventos dentro dos últimos 30 dias até o instante atual, sem eventos futuros, e exclui trabalhos que não estejam publicados. Cada evento contribui uma vez para cada tag capturada.
+- Bloqueio de cookies entre sites pode impedir reconhecer a mesma sessão entre requisições. Nesse caso, a deduplicação não é garantida; o sistema não recorre a fingerprint por IP ou identidade. A leitura não depende do sucesso de registrar métricas. Os números representam eventos válidos conforme essa política, não pessoas únicas.
+- O feed retorna até oito trabalhos recentes e oito tópicos com eventos na janela. Ausência de eventos produz uma lista vazia de tópicos, sem inventar popularidade a partir do contador total.
 - A janela de 30 dias e a fórmula são decisões iniciais do projeto, não métricas fornecidas pelo PDF. Não há painel novo de análise de alcance no recorte inicial.
 
 ### DTOs e erros
 
-Os nomes são normalizados em TypeScript; não reproduzir tipos singulares inadequados do desenho. `TccDTO` transporta identidade do trabalho, título/resumo, ano/semestre/data de defesa, autor, orientador/coorientador, link LUME, tags/áreas, coleção, mídias, arquivo opcional, estado e datas relevantes conforme a visibilidade. `FeedDTO` contém listas de TCCs recentes e de tags em alta, com a janela utilizada. `FiltroBusca` inclui todos os filtros acima.
+Os nomes são normalizados em TypeScript; não reproduzir tipos singulares inadequados do desenho. `TccDTO` transporta identidade do trabalho, título/resumo, ano/semestre/data de defesa, autor, orientador/coorientador, link LUME, tags/áreas, coleção, mídias, arquivo opcional, estado e datas relevantes conforme a visibilidade. Em M3, `FeedDTO` retorna `recent: TccDTO[]`, `topics: (TagDTO & { views: number })[]` e `windowDays: 30`. `FiltroBusca` inclui todos os filtros acima. `GET /api/discovery-options` retorna autores, orientadores, anos, tags, áreas e coleções disponíveis no domínio público; `GET /api/feed` compõe recentes e tópicos; `POST /api/tccs/:id/views` registra exploração sem exigir login.
 
 Operações de escrita recebem entrada própria de criação/edição, em vez de confiar em `autorId`, status ou contadores enviados no DTO de leitura. Erros de validação identificam o campo e preservam a mensagem de negócio adequada; um erro de integração não retorna conexão de banco, segredo ou pilha interna ao visitante.
 
