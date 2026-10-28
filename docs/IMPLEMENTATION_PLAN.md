@@ -8,9 +8,9 @@ O objetivo é implementar a plataforma de divulgação, leitura, busca e relacio
 
 O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste plano, com etapas de definição antes da implementação. As escolhas propostas aqui são de execução e não passam a ser exigências atribuídas ao PDF.
 
-**Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
+**Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. Os destinos técnicos estão registrados em `DECISIONS.md`; o provisionamento permanece pendente. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0, M1 e M2 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md) e [DELIVERY_M2.md](DELIVERY_M2.md). M3: T36-T46 implementadas e validadas localmente; fechamento remoto em acompanhamento em [DELIVERY_M3.md](DELIVERY_M3.md). T47 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
+**Estado atual:** M0 a M3 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md) e [DELIVERY_M3.md](DELIVERY_M3.md). T01-T46 implementadas e verificadas localmente e pelo CI/CD; T47 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -352,7 +352,7 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 - **Conclusão:** 2025 + Carlos Lima + Redes retorna apenas A; 2023 + Redes retorna a mensagem e permite pesquisar novamente.
 - **Dependências:** T22 e T45.
 
-**Saída da etapa / M3:** UC04 validado localmente com filtros, detalhe e download, além de CT01 a CT03 como regressão. Feed, ranking temporal, privacidade e recuperação de falhas verificados; CI/deploy da revisão enviada em acompanhamento. Veja [DELIVERY_M3.md](DELIVERY_M3.md).
+**Saída da etapa / M3:** concluída. UC04 validado com filtros, detalhe e download, além de CT01 a CT03 como regressão. Feed, ranking temporal, privacidade e recuperação de falhas verificados localmente e pelo CI/CD. Frontend publicado e conferido no Pages; evidências e limites de produção em [DELIVERY_M3.md](DELIVERY_M3.md).
 
 ## 11. Etapa 10 - Trabalhos conexos e busca semântica
 

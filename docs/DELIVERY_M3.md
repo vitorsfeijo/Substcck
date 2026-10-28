@@ -1,6 +1,6 @@
 # Entrega M3 - Descoberta, leitura, download e filtros
 
-**Estado:** T36-T46 implementadas e verificadas localmente em 28/10/2026. O fechamento remoto está em acompanhamento; a conclusão do marco depende do CI/deploy da revisão enviada.
+**Estado:** M3 concluído em 28/10/2026. T36-T46 implementadas e verificadas localmente e pelo GitHub Actions, com frontend publicado e conferido no Pages. As dependências externas de produção estão discriminadas abaixo.
 
 M3 corresponde ao quarto marco do [plano](IMPLEMENTATION_PLAN.md). O frontend continua estático no [GitHub Pages](https://vitorsfeijo.github.io/Substcck/). Consulta compartilhada, métricas e arquivos dependem da API e dos serviços externos configurados; o site não transforma dados de demonstração locais em acervo público real.
 
@@ -94,9 +94,15 @@ Um percurso adicional usou navegador sem interceptação de rotas, Fastify, PGli
 - `3da766f`: página de leitura e download com recuperação de falha.
 - `28294cd`: feed, busca, filtros, paginação e integração da navegação.
 - `4e05045`: regressão no navegador e integração ao CI.
+- `5d6a594`: registro dos resultados locais, decisões e progresso do plano.
 
 O registro de resultados e o progresso do plano são versionados em commit documental separado.
 
 ## Evidência remota
 
-Em validação. Registrar revisão enviada, commits por responsabilidade, resultados finais e links de CI/deploy, além da URL pública efetivamente conferida, antes de declarar M3 concluído.
+- Revisão de implementação/documentação verificada: `5d6a594a2918a6dcf58207e9e8b187d8e8837bb7`.
+- [CI bem-sucedido](https://github.com/vitorsfeijo/Substcck/actions/runs/40671683997).
+- [Deploy Pages e checagem pós-deploy bem-sucedidos](https://github.com/vitorsfeijo/Substcck/actions/runs/40671684345).
+- [Site publicado](https://vitorsfeijo.github.io/Substcck/), conferido também no navegador: menu Buscar TCC, rotas de busca/leitura, critérios preservados ao recarregar, indicação correta de API não configurada, ausência de personas locais em produção e apresentação sem overflow em larguras de 360 e 412 pixels, sem erros ou recursos ausentes.
+
+O fechamento documental é um commit posterior, sem mudança de comportamento da aplicação. A publicação do frontend não comprova provisionamento externo nem integração institucional real.

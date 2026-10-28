@@ -96,7 +96,7 @@ A existência dessas dependências não retira o comportamento do escopo. O regi
 
 CT01 e CT02 foram exercitados pela API e pela interface com respostas controladas do LUME. As 94 execuções aprovadas, o percurso com API/banco/arquivos locais reais e os resultados de CI/deploy estão registrados em [DELIVERY_M2.md](DELIVERY_M2.md), com as limitações dos serviços externos explícitas. A integração de leitura/feed/busca completa na interface permanece em M3.
 
-## 8. Evidência a consolidar no fechamento de M3
+## 8. Evidência de M3
 
 | Tarefas     | Requisitos/casos relacionados          | Implementação a verificar                                                                                                                                 |
 | ----------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -107,4 +107,4 @@ CT01 e CT02 foram exercitados pela API e pela interface com respostas controlada
 | T45-T46     | US#04; UC04 FA01; CT03                 | Critérios e paginação na URL, resultados em feed, cenário A-E e consulta 2023 + Redes vazia com mensagem exata.                                           |
 | CI/CD de M3 | GH01-GH08/GH10, no recorte do frontend | Regressão dos marcos anteriores, bundle de teste separado e confirmação de publicação da revisão validada.                                                |
 
-As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY_M3.md). O fechamento acrescentará contagens verificadas e evidências de API/SQL/arquivos locais reais e de CI/deploy; testes controlados não atestam os serviços externos. Busca semântica e conexões permanecem em T47-T52.
+As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY_M3.md), com 119 execuções de testes aprovadas, percurso integrado com API/SQL/arquivos locais reais e evidências de CI/deploy. Testes locais/controlados não atestam os serviços externos. Busca semântica e conexões permanecem em T47-T52.
