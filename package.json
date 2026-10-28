@@ -23,7 +23,8 @@
     "db:migrate": "tsx --env-file-if-exists=.env server/scripts/migrate.ts",
     "db:verify": "tsx --env-file-if-exists=.env server/scripts/verify.ts",
     "check:pages": "node scripts/check-pages.mjs",
-    "check:live": "node scripts/check-live.mjs"
+    "check:live": "node scripts/check-live.mjs",
+    "db:seed": "tsx --env-file-if-exists=.env server/scripts/seed.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.5.12",
