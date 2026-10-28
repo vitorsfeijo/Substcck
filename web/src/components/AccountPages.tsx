@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/context';
+import { TccEditor } from './TccEditor';
+import { OwnWorks } from './OwnWorks';
 
 function returnHash() {
   const next = new URLSearchParams(
     window.location.hash.split('?')[1] || '',
   ).get('next');
-  return next === '/novo-tcc' ? '#/novo-tcc' : '#/perfil';
+  return next === '/novo-tcc' ||
+    (next && /^\/editar-tcc\/[A-Za-z0-9%_-]+$/.test(next))
+    ? `#${next}`
+    : '#/perfil';
 }
 
 function NavigateTo({ hash }: { hash: string }) {
@@ -150,70 +155,75 @@ export function ProfilePage() {
       ) : !auth.user ? (
         <NavigateTo hash="#/entrar?next=/perfil" />
       ) : (
-        <div className="account-card">
-          <span className="tiny-label">
-            {auth.user.role === 'student' ? 'ALUNO' : 'PROFESSOR'}
-          </span>
-          <h2>{auth.user.name}</h2>
-          {auth.config.mode === 'development' && (
-            <p className="development-notice" role="note">
-              Simulação local de acesso. Não utiliza credenciais da UFRGS.
-            </p>
-          )}
-          <dl className="profile-details">
-            <div>
-              <dt>E-mail</dt>
-              <dd>{auth.user.email}</dd>
-            </div>
-            <div>
-              <dt>Identificação institucional</dt>
-              <dd>{auth.user.institutionalLogin}</dd>
-            </div>
-            {auth.user.enrollment && (
+        <>
+          <div className="account-card">
+            <span className="tiny-label">
+              {auth.user.role === 'student' ? 'ALUNO' : 'PROFESSOR'}
+            </span>
+            <h2>{auth.user.name}</h2>
+            {auth.config.mode === 'development' && (
+              <p className="development-notice" role="note">
+                Simulação local de acesso. Não utiliza credenciais da UFRGS.
+              </p>
+            )}
+            <dl className="profile-details">
               <div>
-                <dt>Matrícula</dt>
-                <dd>{auth.user.enrollment}</dd>
+                <dt>E-mail</dt>
+                <dd>{auth.user.email}</dd>
               </div>
-            )}
-            {auth.user.department && (
               <div>
-                <dt>Departamento</dt>
-                <dd>{auth.user.department}</dd>
+                <dt>Identificação institucional</dt>
+                <dd>{auth.user.institutionalLogin}</dd>
               </div>
+              {auth.user.enrollment && (
+                <div>
+                  <dt>Matrícula</dt>
+                  <dd>{auth.user.enrollment}</dd>
+                </div>
+              )}
+              {auth.user.department && (
+                <div>
+                  <dt>Departamento</dt>
+                  <dd>{auth.user.department}</dd>
+                </div>
+              )}
+            </dl>
+            <div className="account-actions">
+              {auth.user.role === 'student' && (
+                <a className="button button-primary" href="#/novo-tcc">
+                  Cadastrar Novo TCC <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              <button
+                className="text-button"
+                disabled={auth.busy}
+                onClick={() => {
+                  setDeparting(true);
+                  void auth.logout().then((left) => {
+                    if (left) window.location.hash = '#/';
+                    else setDeparting(false);
+                  });
+                }}
+              >
+                {auth.busy ? 'Saindo…' : 'Sair da conta'}
+              </button>
+            </div>
+            {auth.error && (
+              <p className="access-error" role="alert">
+                {auth.error}
+              </p>
             )}
-          </dl>
-          <div className="account-actions">
-            {auth.user.role === 'student' && (
-              <a className="button button-primary" href="#/novo-tcc">
-                Cadastrar Novo TCC <span aria-hidden="true">↗</span>
-              </a>
-            )}
-            <button
-              className="text-button"
-              disabled={auth.busy}
-              onClick={() => {
-                setDeparting(true);
-                void auth.logout().then((left) => {
-                  if (left) window.location.hash = '#/';
-                  else setDeparting(false);
-                });
-              }}
-            >
-              {auth.busy ? 'Saindo…' : 'Sair da conta'}
-            </button>
           </div>
-          {auth.error && (
-            <p className="access-error" role="alert">
-              {auth.error}
-            </p>
+          {auth.user.role === 'student' && (
+            <OwnWorks key={auth.user.id} userId={auth.user.id} />
           )}
-        </div>
+        </>
       )}
     </section>
   );
 }
 
-export function NewTccPage() {
+export function NewTccPage({ workId }: { workId?: string }) {
   const auth = useAuth();
   return (
     <section
@@ -222,12 +232,22 @@ export function NewTccPage() {
     >
       <p className="eyebrow">SEU TRABALHO</p>
       <h1 id="new-tcc-title">
-        A próxima <em>contribuição.</em>
+        {workId ? (
+          <>
+            Sua pesquisa, <em>em evolução.</em>
+          </>
+        ) : (
+          <>
+            A próxima <em>contribuição.</em>
+          </>
+        )}
       </h1>
       {auth.status !== 'ready' ? (
         <AccessStatus />
       ) : !auth.user ? (
-        <NavigateTo hash="#/entrar?next=/novo-tcc" />
+        <NavigateTo
+          hash={`#/entrar?next=${encodeURIComponent(workId ? `/editar-tcc/${encodeURIComponent(workId)}` : '/novo-tcc')}`}
+        />
       ) : auth.user.role !== 'student' ? (
         <div className="account-card" role="alert">
           <h2>Este espaço é reservado ao aluno autor.</h2>
@@ -240,17 +260,7 @@ export function NewTccPage() {
           </a>
         </div>
       ) : (
-        <div className="account-card">
-          <span className="tiny-label">PRÓXIMA ENTREGA</span>
-          <h2>Cadastro de TCC disponível no próximo marco.</h2>
-          <p>
-            Seu acesso como aluno foi reconhecido. O formulário e a publicação
-            de trabalhos serão entregues no M2.
-          </p>
-          <a className="text-link" href="#/perfil">
-            Voltar ao perfil <span aria-hidden="true">↗</span>
-          </a>
-        </div>
+        <TccEditor key={`${auth.user.id}:${workId || 'new'}`} workId={workId} />
       )}
     </section>
   );

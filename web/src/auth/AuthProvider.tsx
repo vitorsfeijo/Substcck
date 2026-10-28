@@ -76,7 +76,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       void refresh();
     };
     const routeChanged = () => {
-      if (/^#\/(perfil|novo-tcc)(?:\?|$)/.test(window.location.hash)) recheck();
+      if (
+        /^#\/(perfil|novo-tcc|editar-tcc)(?:[/?]|$)/.test(window.location.hash)
+      )
+        recheck();
     };
     window.addEventListener('focus', recheck);
     window.addEventListener('hashchange', routeChanged);

@@ -4,7 +4,7 @@ import { ResearchMap } from './components/ResearchMap';
 import { useAuth } from './auth/context';
 import { LoginPage, NewTccPage, ProfilePage } from './components/AccountPages';
 
-type Route = 'home' | 'about' | 'login' | 'profile' | 'new-tcc';
+type Route = 'home' | 'about' | 'login' | 'profile' | 'new-tcc' | 'edit-tcc';
 
 function getRoute(): Route {
   const path = window.location.hash.split('?')[0];
@@ -12,6 +12,7 @@ function getRoute(): Route {
   if (path === '#/entrar') return 'login';
   if (path === '#/perfil') return 'profile';
   if (path === '#/novo-tcc') return 'new-tcc';
+  if (/^#\/editar-tcc\/[^/?]+$/.test(path)) return 'edit-tcc';
   return 'home';
 }
 
@@ -199,17 +200,17 @@ function About() {
       </p>
       <div className="about-grid">
         <section aria-labelledby="delivery-title">
-          <span className="tiny-label">SEGUNDA ENTREGA</span>
+          <span className="tiny-label">TERCEIRA ENTREGA</span>
           <h2 id="delivery-title">A base para o que vem.</h2>
           <p>
-            Esta versão acrescenta a base de autenticação, os perfis de acesso e
-            a persistência dos trabalhos. O catálogo, a busca e a publicação
-            serão desenvolvidos nas próximas entregas.
+            Esta versão permite cadastrar, ilustrar, publicar e editar
+            trabalhos, além de salvar rascunhos privados. O catálogo e a busca
+            na interface serão desenvolvidos na próxima entrega.
           </p>
           <p>
             O acesso institucional de produção ainda precisa ser conectado ao
-            provedor da universidade. Esta página não recebe cadastros nem
-            publica trabalhos.
+            provedor da universidade. O cadastro e a publicação exigem uma API
+            configurada e um perfil de aluno autorizado.
           </p>
           <PlatformStatus />
         </section>
@@ -245,11 +246,15 @@ function About() {
 export default function App() {
   const auth = useAuth();
   const [route, setRoute] = useState(getRoute);
+  const [hash, setHash] = useState(() => window.location.hash);
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
   useEffect(() => {
-    const changeRoute = () => setRoute(getRoute());
+    const changeRoute = () => {
+      setHash(window.location.hash);
+      setRoute(getRoute());
+    };
     window.addEventListener('hashchange', changeRoute);
     return () => window.removeEventListener('hashchange', changeRoute);
   }, []);
@@ -261,6 +266,7 @@ export default function App() {
       login: 'Entrar — Substcck',
       profile: 'Meu perfil — Substcck',
       'new-tcc': 'Novo TCC — Substcck',
+      'edit-tcc': 'Editar TCC — Substcck',
     };
     document.title = titles[route];
     if (firstRender.current) {
@@ -269,7 +275,7 @@ export default function App() {
     }
     window.scrollTo({ top: 0, behavior: 'instant' });
     mainRef.current?.focus({ preventScroll: true });
-  }, [route]);
+  }, [route, hash]);
 
   return (
     <>
@@ -298,7 +304,10 @@ export default function App() {
           <a
             href={auth.user ? '#/perfil' : '#/entrar'}
             aria-current={
-              route === 'profile' || route === 'login' || route === 'new-tcc'
+              route === 'profile' ||
+              route === 'login' ||
+              route === 'new-tcc' ||
+              route === 'edit-tcc'
                 ? 'page'
                 : undefined
             }
@@ -320,8 +329,21 @@ export default function App() {
           <LoginPage />
         ) : route === 'profile' ? (
           <ProfilePage />
-        ) : route === 'new-tcc' ? (
-          <NewTccPage />
+        ) : route === 'new-tcc' || route === 'edit-tcc' ? (
+          <NewTccPage
+            workId={
+              route === 'edit-tcc'
+                ? (() => {
+                    const id = hash.split('?')[0].split('/')[2];
+                    try {
+                      return decodeURIComponent(id);
+                    } catch {
+                      return id;
+                    }
+                  })()
+                : undefined
+            }
+          />
         ) : (
           <Home />
         )}
