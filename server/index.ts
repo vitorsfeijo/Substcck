@@ -3,6 +3,7 @@ import { openDatabase } from './data/database.js';
 import { createApp } from './app.js';
 import { createPlatformRepository } from './repositories/platform.js';
 import { createOidcAdapter } from './auth/oidc.js';
+import { createAttachmentStore } from './attachment-store.js';
 
 const config = readConfig();
 const db = await openDatabase(config);
@@ -12,6 +13,7 @@ const identityAdapter = config.auth.oidc
 const app = await createApp(config, createPlatformRepository(db), {
   database: db,
   identityAdapter,
+  attachmentStore: createAttachmentStore(config),
 });
 app.addHook('onClose', () => db.close());
 for (const signal of ['SIGINT', 'SIGTERM']) {
