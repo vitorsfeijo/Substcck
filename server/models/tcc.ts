@@ -87,8 +87,8 @@ export interface TccPage {
 
 export interface FeedDTO {
   recent: TccDTO[];
-  trendingTags: { tag: TagDTO; views: number }[];
-  periodDays: number;
+  topics: (TagDTO & { views: number })[];
+  windowDays: 30;
 }
 
 export class TccAccessError extends Error {
