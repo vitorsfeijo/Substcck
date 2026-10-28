@@ -5,6 +5,22 @@ export interface ServerConfig {
   corsOrigins: string[];
   databaseUrl?: string;
   dataDir: string;
+  auth: {
+    mode: 'disabled' | 'development' | 'oidc';
+    frontendUrl: string;
+    publicApiUrl: string;
+    sessionTtlSeconds: number;
+    oidc?: {
+      issuer: string;
+      clientId: string;
+      clientSecret: string;
+      redirectUri: string;
+      roleClaim: string;
+      enrollmentClaim: string;
+      departmentClaim: string;
+      loginClaim: string;
+    };
+  };
 }
 
 export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
@@ -39,12 +55,105 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   if (env.DATABASE_URL && !/^postgres(ql)?:\/\//.test(env.DATABASE_URL)) {
     throw new Error('DATABASE_URL deve usar PostgreSQL.');
   }
+  const mode = env.AUTH_MODE || 'disabled';
+  if (!['disabled', 'development', 'oidc'].includes(mode))
+    throw new Error('AUTH_MODE inválido.');
+  const host = env.HOST || '127.0.0.1';
+  const frontendUrl = env.FRONTEND_URL || 'http://127.0.0.1:5173/Substcck/';
+  const publicApiUrl = (
+    env.PUBLIC_API_URL || 'http://127.0.0.1:3001/api'
+  ).replace(/\/+$/, '');
+  const frontend = new URL(frontendUrl);
+  const api = new URL(publicApiUrl);
+  if (
+    ![frontend, api].every(
+      (url) =>
+        ['http:', 'https:'].includes(url.protocol) &&
+        !url.username &&
+        !url.password &&
+        !url.search &&
+        !url.hash,
+    )
+  ) {
+    throw new Error(
+      'FRONTEND_URL e PUBLIC_API_URL devem ser URLs HTTP(S) sem credenciais, query ou fragmento.',
+    );
+  }
+  const loopback = (hostname: string) =>
+    ['127.0.0.1', 'localhost', '[::1]', '::1'].includes(hostname);
+  if (
+    mode === 'development' &&
+    (environment === 'production' ||
+      !loopback(host) ||
+      !loopback(api.hostname) ||
+      !loopback(frontend.hostname) ||
+      corsOrigins.some((origin) => !loopback(new URL(origin).hostname)))
+  ) {
+    throw new Error(
+      'Autenticação de desenvolvimento exige ambiente não produtivo e acesso exclusivamente local.',
+    );
+  }
+  const sessionTtlSeconds = Number(env.SESSION_TTL_SECONDS || 3600);
+  if (
+    !Number.isInteger(sessionTtlSeconds) ||
+    sessionTtlSeconds < 60 ||
+    sessionTtlSeconds > 28800
+  )
+    throw new Error('SESSION_TTL_SECONDS deve estar entre 60 e 28800.');
+  let oidc: ServerConfig['auth']['oidc'];
+  if (mode === 'oidc') {
+    for (const key of [
+      'OIDC_ISSUER',
+      'OIDC_CLIENT_ID',
+      'OIDC_CLIENT_SECRET',
+      'OIDC_REDIRECT_URI',
+      'FRONTEND_URL',
+      'PUBLIC_API_URL',
+    ]) {
+      if (!env[key]) throw new Error(`OIDC exige ${key}.`);
+    }
+    const issuer = new URL(env.OIDC_ISSUER!);
+    const redirect = new URL(env.OIDC_REDIRECT_URI!);
+    if (
+      issuer.protocol !== 'https:' ||
+      issuer.username ||
+      issuer.password ||
+      issuer.hash ||
+      issuer.search ||
+      redirect.href !== `${publicApiUrl}/auth/callback`
+    )
+      throw new Error('Issuer ou callback OIDC inválido.');
+    if (
+      environment === 'production' &&
+      (frontend.protocol !== 'https:' || api.protocol !== 'https:')
+    )
+      throw new Error('OIDC em produção exige HTTPS.');
+    if (!corsOrigins.includes(frontend.origin))
+      throw new Error('CORS_ORIGINS deve permitir a origem do frontend OIDC.');
+    oidc = {
+      issuer: env.OIDC_ISSUER!,
+      clientId: env.OIDC_CLIENT_ID!,
+      clientSecret: env.OIDC_CLIENT_SECRET!,
+      redirectUri: redirect.href,
+      roleClaim: env.OIDC_ROLE_CLAIM || 'role',
+      enrollmentClaim: env.OIDC_ENROLLMENT_CLAIM || 'enrollment',
+      departmentClaim: env.OIDC_DEPARTMENT_CLAIM || 'department',
+      loginClaim: env.OIDC_LOGIN_CLAIM || 'preferred_username',
+    };
+  }
   return {
     environment: environment as ServerConfig['environment'],
-    host: env.HOST || '127.0.0.1',
+    host,
     port,
     corsOrigins,
     databaseUrl: env.DATABASE_URL || undefined,
     dataDir: env.PGLITE_DATA_DIR || './.cache/data/dev',
+    auth: {
+      mode: mode as ServerConfig['auth']['mode'],
+      frontendUrl,
+      publicApiUrl,
+      sessionTtlSeconds,
+      oidc,
+    },
   };
 }
