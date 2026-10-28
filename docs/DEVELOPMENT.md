@@ -2,7 +2,7 @@
 
 ## Preparação
 
-Requisitos: Node.js 24 e npm. A execução local de M0/M1 não exige Docker nem credenciais de nuvem.
+Requisitos: Node.js 24 e npm. A execução local de M0 a M2 não exige Docker nem credenciais de nuvem.
 
 Na raiz do checkout:
 
@@ -23,21 +23,22 @@ Opcionalmente copie `.env.example` para `.env` e ajuste as variáveis. A ausênc
 
 ## Comandos
 
-| Comando                               | Finalidade                                                                            |
-| ------------------------------------- | ------------------------------------------------------------------------------------- |
-| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                  |
-| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                      |
-| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção.  |
-| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.        |
-| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                  |
-| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                  |
-| `npm test`                            | Testes de API, configuração, persistência e migrações.                                |
-| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.     |
-| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                    |
-| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                   |
-| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                         |
-| `npm run test:e2e:auth`               | Gerar bundle isolado de teste e validar os fluxos de conta com respostas controladas. |
-| `npm run check`                       | Executar a cadeia completa de verificações.                                           |
+| Comando                               | Finalidade                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------ |
+| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                 |
+| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                     |
+| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção. |
+| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.       |
+| `npm run files:prune`                 | Remover uploads registrados sem referências e com mais de 24 horas; execução manual. |
+| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                 |
+| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                 |
+| `npm test`                            | Testes de API, configuração, persistência e migrações.                               |
+| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.    |
+| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                   |
+| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                  |
+| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                        |
+| `npm run test:e2e:auth`               | Gerar bundle isolado e validar conta/editor com respostas de API controladas.        |
+| `npm run check`                       | Executar a cadeia completa de verificações.                                          |
 
 Antes do primeiro teste de navegador, execute `npx playwright install chromium`. Em Linux CI, o workflow instala também as dependências de sistema. Testes de banco usam diretórios temporários próprios, sem dados de usuário.
 
@@ -56,14 +57,14 @@ docs/                    especificação, plano, decisões e guias
 docs/references/         PDF original do desafio
 docs/images/spec/        imagens e diagramas extraídos do PDF
 .github/workflows/       CI e deploy Pages
-.cache/                  builds, banco local e resultados de testes ignorados
+.cache/                  builds, banco local, uploads e resultados de testes ignorados
 ```
 
 Os comandos npm continuam sendo executados na raiz e as URLs locais e públicas permanecem iguais. `config/` agrupa as configurações explicitamente referenciadas pelos scripts; arquivos necessários à descoberta automática das ferramentas, como `eslint.config.js` e `.prettierrc.json`, permanecem na raiz.
 
 ## Banco e migrações
 
-Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso e `003_tcc_domain.sql` cria o domínio de TCC e classificação.
+Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso, `003_tcc_domain.sql` cria o domínio de TCC e classificação, `004_attachments.sql` registra os anexos e `005_publication_requests.sql` registra as requisições de criação idempotentes.
 
 Migrações são ordenadas por nome e registradas com checksum, em transações. Reexecutar não duplica operações; alterar uma migração já aplicada falha explicitamente. Crie outro arquivo SQL para evoluir o esquema. A tabela de migrações é bloqueada durante aplicação para serializar executores; no provisionamento inicial, execute um único processo de migração.
 
@@ -106,7 +107,7 @@ npm run db:seed
 npm run dev
 ```
 
-Abra `http://127.0.0.1:5173/Substcck/#/entrar`. O aviso de simulação deve permanecer visível. Os perfis fixos são aluno autor, aluno pesquisador e professor. O aluno tem acesso à navegação de novo TCC; o professor consulta como leitor e não recebe a ação de cadastro. A tela de novo TCC ainda é uma base protegida para M2.
+Abra `http://127.0.0.1:5173/Substcck/#/entrar`. O aviso de simulação deve permanecer visível. Os perfis fixos são aluno autor, aluno pesquisador e professor. O aluno tem acesso ao cadastro em `#/novo-tcc` e à lista privada de trabalhos no perfil; o professor consulta como leitor e não recebe a ação de cadastro. A edição e a retomada usam `#/editar-tcc/:id`, com autoria novamente verificada no servidor.
 
 A carga `db:seed` é opcional para o login e serve para reproduzir dados A-E do CT03. Ela recusa produção e qualquer `DATABASE_URL`, inclusive de teste remoto. Não cria credenciais institucionais reais. Os trabalhos têm nomes/descrições de demonstração e URLs de exemplo; não se trata de uma importação de pesquisas reais.
 
@@ -151,9 +152,54 @@ Quando Pages e API estiverem em sites diferentes, a política de cookies entre s
 | `GET /api/tccs` / `GET /api/tccs/:id`            | Base de consulta pública que exclui rascunhos.                             |
 | `GET /api/me/tccs` / `GET /api/me/tccs/:id`      | Consulta privada de trabalhos do aluno autor autenticado.                  |
 
-Não há endpoint HTTP de cadastro/publicação de TCC neste marco. O repositório oferece gravação interna controlada para testes, carga local e implementação de M2. Metadados de arquivos/mídias não representam uploads já implementados.
+## Cadastro, publicação e edição de M2
 
-O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas. Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. A prova de integração real UFRGS continua pendente, independentemente do resultado desses testes.
+As operações de escrita exigem sessão de aluno, origem permitida e `X-CSRF-Token`. O servidor deriva a autoria da sessão; IDs e caminhos enviados livremente no cliente não concedem acesso a dados de outro usuário.
+
+| Rota                                  | Comportamento                                                                              |
+| ------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `GET /api/tcc-options`                | Professores, tags, áreas e coleções disponíveis para o formulário.                         |
+| `POST /api/tags`                      | Criar/reutilizar tag com nome e área opcional, mediante autorização.                       |
+| `POST /api/tccs`                      | Criar publicação ou rascunho privado conforme `intent: publish` ou `intent: draft`.        |
+| `PUT /api/tccs/:id`                   | Editar trabalho próprio; publicação existente continua pública somente com revisão válida. |
+| `POST /api/attachments?kind=image`    | Enviar uma imagem no campo multipart `file`.                                               |
+| `POST /api/attachments?kind=document` | Enviar um documento no campo multipart `file`.                                             |
+| `GET /api/attachments/:id`            | Ler anexo próprio ou vinculado a um TCC publicado; rascunhos continuam privados.           |
+| `DELETE /api/attachments/:id`         | Remover envio próprio ainda sem vínculo; anexo em uso responde HTTP 409.                   |
+
+O comando de TCC inclui título, resumo, ano/semestre/data de defesa, orientação/coorientação, link LUME, tags, coleção, IDs dos anexos e descrições de imagens. Não enviar `autorId`, caminhos de armazenamento ou um estado arbitrário para tentar substituir a autorização do servidor. Cada criação admite uma `Idempotency-Key` estável; repetir a mesma criação com os mesmos dados não duplica o trabalho. Reusar essa chave com dados diferentes responde HTTP 409. Edição usa PUT no identificador existente.
+
+Publicação valida campos e consulta o LUME antes de gravar. O serviço aceita somente HTTPS no host exato `lume.ufrgs.br`, porta padrão, sem credenciais e até 2.048 caracteres; remove o fragmento. A checagem usa HEAD, com GET limitado se HEAD responder 405/501, até três redirecionamentos revalidados e prazo total de 5 segundos. O corpo de GET é cancelado, sem baixar o artigo inteiro. Domínio indevido, URL inválida, timeout e inacessibilidade impedem a publicação e oferecem rascunho quando permitido.
+
+Salvar rascunho é uma ação explícita. Rascunhos e anexos privados podem ser retomados somente pelo autor. Uma edição inválida de PUBLICADO mantém a versão pública anterior e os valores editados no formulário; não despublica o trabalho nem sobrescreve parcialmente seus dados. As consultas SQL passam a refletir publicação/edição após o commit; não existe worker separado de indexação neste marco.
+
+O formulário mantém o limite de cinco tags e três imagens; permite descrição e prévia das imagens e um documento opcional. No exemplo CT01, usar 2025/2 e uma data de defesa compatível, por exemplo 2025-10-15. URLs dos dados fictícios A-E não comprovam acessibilidade real no LUME; para exercitar a publicação manual, usar um registro oficial acessível.
+
+### Armazenamento e formatos
+
+Desenvolvimento/teste usa `STORAGE_DRIVER=local` e `UPLOAD_DIRECTORY=./.cache/uploads`. Esse diretório contém binários reais e precisa ser preservado junto com os metadados do banco local; não faz parte do Git, de `dist` ou do artefato do Pages. A API gera as chaves dos objetos e não usa nomes de upload como caminhos do sistema.
+
+Imagens PNG, JPEG ou WebP têm limite de 5 MiB cada, até 16 milhões de pixels na decodificação e descrição de até 300 caracteres. O documento opcional único aceita PDF, DOCX ou EPUB de até 25 MiB. O servidor examina conteúdo/estrutura e não confia somente na extensão ou MIME informado. Pacotes ZIP são limitados a mil entradas, 25 MiB por entrada e 100 MiB expandidos; não são extraídos para disco, e entradas inseguras, repetidas ou corrompidas são rejeitadas.
+
+Produção recusa `STORAGE_DRIVER=local`. Sem driver configurado, usa `unconfigured` e responde HTTP 503 a um upload autorizado, sem fingir armazenamento. Para habilitar S3/R2, configurar exclusivamente no servidor:
+
+| Variável                                    | Finalidade                                               |
+| ------------------------------------------- | -------------------------------------------------------- |
+| `STORAGE_DRIVER=s3`                         | Selecionar o adaptador de objetos.                       |
+| `S3_ENDPOINT`                               | Endpoint HTTPS sem credenciais, query ou fragmento.      |
+| `S3_BUCKET`                                 | Bucket privado; não tornar listagem ou uploads públicos. |
+| `S3_REGION`                                 | Região do provedor; padrão `auto`.                       |
+| `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` | Credenciais de acesso do servidor.                       |
+
+O bucket é acessado pela API, que autoriza a leitura de cada anexo. Não incorporar credenciais S3/R2 em variáveis `VITE_*`. Provisionar o bucket e conferir sua política é uma ação externa ainda pendente.
+
+### Falhas, remoção e uploads antigos
+
+SQL e armazenamento de objetos não compartilham uma transação distribuída. O upload grava o objeto antes do registro; em falha SQL, tenta remover o objeto recém-gravado. A publicação resolve os anexos do autor e grava os vínculos na mesma transação SQL do TCC. Remover uma seleção do formulário não deve excluir um anexo ainda referenciado por um trabalho.
+
+Com a API local parada, `npm run files:prune` remove registros/objetos de uploads sem referências e com mais de 24 horas. No contêiner de produção, o comando equivalente é `node build/server/scripts/prune-attachments.js`, com as mesmas variáveis de banco e armazenamento da API. A operação reconfirma idade e ausência de vínculo sob bloqueio de linha antes de remover, e não cria cron ou automação. Ela percorre metadados elegíveis e não inventaria arquivos/objetos que eventualmente ficaram sem registro após uma interrupção do processo. Anexos vinculados são preservados.
+
+O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas para conta e editor (`auth.spec.ts` e `editor.spec.ts`). Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. As provas de conexão real UFRGS e provisionamento de backend/banco/bucket continuam pendentes, independentemente do resultado desses testes.
 
 ## Backend externo preparado, sem provisionamento
 

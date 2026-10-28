@@ -6,6 +6,8 @@ As relações abaixo indicam onde cada requisito será entregue e como será ver
 
 M1, correspondente a T14-T22, foi entregue com testes e CI/CD bem-sucedidos. Seu escopo, evidências e dependências externas estão em [DELIVERY_M1.md](DELIVERY_M1.md). Identidade local simulada e provedor OIDC controlado nos testes não representam conexão institucional real com a UFRGS.
 
+M2, correspondente a T23-T35, tem os fluxos de publicação, rascunho, edição e anexos implementados e está em validação final. O escopo e o fechamento remoto estão em [DELIVERY_M2.md](DELIVERY_M2.md); essa implementação não atesta disponibilidade real do LUME nem provisionamento dos serviços externos de produção.
+
 ## 1. Requisitos funcionais, histórias e casos de uso
 
 | Origem                   | Comportamento esperado                                                                     | Contrato definido em M0                                                                                    | Implementação principal  | Evidência prevista                                                                        |
@@ -80,3 +82,16 @@ Esses casos não devem ser marcados como concluídos por testes apenas da saúde
 - **LUME:** testes controlados comprovam o tratamento de estados; checagem do serviço real é evidência adicional da integração, sujeita à disponibilidade externa.
 
 A existência dessas dependências não retira o comportamento do escopo. O registro de entrega deve indicar quais foram satisfeitas e quais continuam pendentes, sem marcar um requisito de negócio completo por uma simulação ou pela conclusão de M0.
+
+## 7. Evidência a consolidar no fechamento de M2
+
+| Tarefas     | Requisitos/casos relacionados          | Implementação a verificar                                                                                                                 |
+| ----------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| T23-T24     | UC03; RF#01; UC01/UC02                 | Política de URL e acessibilidade LUME, redirecionamentos e prazo total, sem depender da rede externa nos testes de regressão.             |
+| T25-T26     | RF#01; US#01; UC01; CT01/CT02          | Publicação autenticada, campos obrigatórios, idempotência de criação, aviso LUME e salvamento explícito de rascunho privado.              |
+| T27-T30     | RF#01; US#01; RN06/RN07                | Binários e metadados vinculados por IDs do autor, formatos/tamanhos/quantidades, acesso privado e recuperação de falha/limpeza de órfãos. |
+| T31-T34     | US#01; UC01 e alternativas; CT01/CT02  | Formulário com orientação, período/data, tags, imagens/documento e dados mantidos quando o usuário corrige ou recusa rascunho.            |
+| T35         | RF#01; UC02; RN02/RN11                 | Edição do próprio trabalho, revalidação e gravação atômica sem substituir publicação válida por uma edição inválida.                      |
+| CI/CD de M2 | GH01-GH08/GH10, no recorte do frontend | Verificações da revisão enviada, bundle de teste separado do artefato público e confirmação do deploy antes de fechar o marco.            |
+
+CT01 e CT02 devem ser exercitados pela API e pela interface com respostas controladas do LUME. A documentação final registrará quais verificações foram executadas e seus resultados, sem tratar a existência de um teste ou arquivo de workflow como prova antecipada de sucesso. A integração de leitura/feed/busca completa na interface permanece em M3.

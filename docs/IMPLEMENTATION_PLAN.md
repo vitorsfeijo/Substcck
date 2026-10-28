@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](DELIVERY_M0.md) para evidências e limites; M1 concluído: T14-T22 implementadas, validadas localmente e pelo CI/CD. Evidências e limites em [DELIVERY_M1.md](DELIVERY_M1.md). T23 em diante permanecem pendentes.
+**Estado atual:** M0 e M1 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md) e [DELIVERY_M1.md](DELIVERY_M1.md). M2: T23-T35 implementadas e validadas localmente; fechamento remoto em acompanhamento em [DELIVERY_M2.md](DELIVERY_M2.md). T36 em diante permanecem pendentes.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -194,25 +194,25 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T23 - Validar estrutura e domínio da URL
 
-- [ ] Implementar a política de URLs decidida em T05 antes de qualquer consulta externa, com normalização e verificação do destino permitido.
+- [x] Implementar a política de URLs decidida em T05 antes de qualquer consulta externa, com normalização e verificação do destino permitido.
 - **Conclusão:** URL malformada, domínio indevido e tentativas de acessar destinos não permitidos são rejeitados; o link aceito continua associado ao TCC.
 - **Dependências:** T05 e T20.
 
 ### T24 - Implementar checagem de acessibilidade LUME
 
-- [ ] Criar `ValidadorLumeService` ou equivalente, com timeout, política de redirecionamento e respostas para sucesso/falha de rede.
+- [x] Criar `ValidadorLumeService` ou equivalente, com timeout, política de redirecionamento e respostas para sucesso/falha de rede.
 - **Conclusão:** link válido, quebrado e servidor indisponível são distinguíveis para o serviço; testes usam respostas controladas, sem depender da disponibilidade real do LUME.
 - **Dependências:** T07 e T23.
 
 ### T25 - Implementar serviço e operação de publicação
 
-- [ ] Encadear autorização, validação de campos, validação LUME, persistência PUBLICADO e atualização da busca.
+- [x] Encadear autorização, validação de campos, validação LUME, persistência PUBLICADO e atualização da busca.
 - **Conclusão:** publicação válida aparece em consulta pública com tags; erro não deixa publicação parcial visível; sucesso retorna o contrato completo e a mensagem de UC01.
 - **Dependências:** T16, T20, T21, T22 e T24.
 
 ### T26 - Implementar salvamento explícito de rascunho
 
-- [ ] Oferecer persistência RASCUNHO após falha LUME e confirmação do usuário, sem publicação automática.
+- [x] Oferecer persistência RASCUNHO após falha LUME e confirmação do usuário, sem publicação automática.
 - **Conclusão:** dados são preservados e isolados do feed, busca e acesso público por ID; recusar rascunho não grava uma publicação e permite manter o formulário.
 - **Dependências:** T25.
 
@@ -222,25 +222,25 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T27 - Criar armazenamento e metadados de anexos
 
-- [ ] Implementar armazenamento de mídias e do arquivo, com nome original, formato, caminho e descrição de mídia conforme o modelo.
+- [x] Implementar armazenamento de mídias e do arquivo, com nome original, formato, caminho e descrição de mídia conforme o modelo.
 - **Conclusão:** referências persistidas resolvem os arquivos correspondentes e respeitam o acesso ao TCC; rascunhos não expõem anexos publicamente.
 - **Dependências:** T07, T18 e T21.
 
 ### T28 - Implementar envio de até três imagens
 
-- [ ] Criar operação de upload com validação de conteúdo/formato/tamanho definidos em T04 e vínculo ao TCC do autor.
+- [x] Criar operação de upload com validação de conteúdo/formato/tamanho definidos em T04 e vínculo ao TCC do autor.
 - **Conclusão:** 0 a 3 imagens são aceitas, uma quarta é recusada e envios de outro usuário não alteram o trabalho.
 - **Dependências:** T16, T20 e T27.
 
 ### T29 - Implementar arquivo opcional DOCX/PDF/EPUB
 
-- [ ] Criar envio e substituição de um único arquivo do trabalho, validando os formatos e limites acordados.
+- [x] Criar envio e substituição de um único arquivo do trabalho, validando os formatos e limites acordados.
 - **Conclusão:** cada formato permitido é aceito; formato indevido é rejeitado; ausência de arquivo continua permitida.
 - **Dependências:** T16, T20 e T27.
 
 ### T30 - Integrar anexos à publicação e às falhas
 
-- [ ] Associar anexos ao cadastro/rascunho e tratar remoção, substituição e falhas de gravação sem perder dados válidos ou deixar referências quebradas.
+- [x] Associar anexos ao cadastro/rascunho e tratar remoção, substituição e falhas de gravação sem perder dados válidos ou deixar referências quebradas.
 - **Conclusão:** falha de upload é recuperável; salvar/publicar preserva vínculos; a política de limpeza de arquivos sem referência está documentada e implementada conforme necessário.
 - **Dependências:** T25, T26, T28 e T29.
 
@@ -250,35 +250,35 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T31 - Construir os campos textuais do formulário
 
-- [ ] Criar tela de “Cadastrar Novo TCC” com título, resumo simplificado, ano/semestre, orientador, coorientador e URL LUME.
+- [x] Criar tela de “Cadastrar Novo TCC” com título, resumo simplificado, ano/semestre, orientador, coorientador e URL LUME.
 - **Conclusão:** campos seguem a matriz de T04, com escrita limpa e layout utilizável em celular e desktop.
 - **Dependências:** T17 e T22.
 
 ### T32 - Adicionar seleção/criação de tags e anexos
 
-- [ ] Integrar sugestões e novas tags, classificação e controles de imagem/arquivo, incluindo prévia e remoção antes da publicação.
+- [x] Integrar sugestões e novas tags, classificação e controles de imagem/arquivo, incluindo prévia e remoção antes da publicação.
 - **Conclusão:** seleção limita a 5 tags e 3 imagens; arquivo opcional é identificável; vínculos de área/coleção seguem o modelo decidido.
 - **Dependências:** T19, T28, T29 e T31.
 
 ### T33 - Conectar publicação e erros obrigatórios
 
-- [ ] Integrar “Publicar TCC”, estado de envio, sucesso e validação com destaque vermelho dos campos pendentes.
+- [x] Integrar “Publicar TCC”, estado de envio, sucesso e validação com destaque vermelho dos campos pendentes.
 - **Conclusão:** CT01 completa o fluxo pela interface; UC01 FA01 preserva tudo que já foi preenchido e mostra “Preencha todos os campos obrigatórios”.
 - **Dependências:** T25, T30 e T32.
 
 ### T34 - Conectar oferta de rascunho e retomada
 
-- [ ] Exibir aviso completo de FA02 e ações de salvar/recusar; permitir ao autor localizar e retomar o rascunho salvo.
+- [x] Exibir aviso completo de FA02 e ações de salvar/recusar; permitir ao autor localizar e retomar o rascunho salvo.
 - **Conclusão:** CT02 funciona com confirmação e recusa; salvar mostra “Rascunho salvo com sucesso”; retomar recupera dados e anexos.
 - **Dependências:** T26 e T33.
 
 ### T35 - Implementar edição do próprio TCC
 
-- [ ] Reutilizar formulário e regras em UC02, incluindo revalidação LUME, atualização da busca e política de estados definida em T04.
+- [x] Reutilizar formulário e regras em UC02, incluindo revalidação LUME, atualização da busca e política de estados definida em T04.
 - **Conclusão:** autor altera o próprio trabalho sem duplicá-lo; acesso indevido é negado; edição inválida tem comportamento explícito e preserva dados conforme a decisão registrada.
 - **Dependências:** T21, T24, T33 e T34.
 
-**Saída da etapa / M2:** demonstração de publicação, rascunho e edição com imagens e arquivo. Validar CT01, CT02, obrigatórios, limites e autoria.
+**Saída da etapa / M2:** publicação, rascunho e edição com imagens e arquivo implementados e validados localmente. CT01, CT02, obrigatórios, limites, autoria e recuperação de falhas exercitados pela API e pelo navegador. A conclusão do marco aguarda CI/deploy da revisão enviada; veja [DELIVERY_M2.md](DELIVERY_M2.md).
 
 ## 9. Etapa 8 - Leitura, download e feed
 
