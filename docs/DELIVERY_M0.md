@@ -4,16 +4,16 @@
 
 - T01-T05: decisões de stack/destinos, acesso, campos, estados, LUME, filtros/feed e rastreabilidade registradas em [DECISIONS.md](DECISIONS.md) e [TRACEABILITY.md](TRACEABILITY.md).
 - T06-T08: frontend React/TypeScript, API Fastify de saúde com controller/service/repository/model, adaptadores PostgreSQL/PGlite e migração transacional com checksum.
-- T09-T10: comandos de validação, artefato estático sob `/Subtccstack/`, navegação em hash e configuração pública separada.
+- T09-T10: comandos de validação, artefato estático sob `/Substcck/`, navegação em hash e configuração pública separada.
 - T11-T12: CI reutilizável em PR/push e deploy Pages condicionado à validação da mesma revisão, com permissões restritas e checagem pós-deploy.
 - T13: GitHub Pages habilitado com origem Actions e HTTPS; primeira publicação confirmada.
 
 ## Publicação confirmada
 
-- Site: [Subtccstack](https://vitorsfeijo.github.io/Subtccstack/).
+- Site: [Subtccstack](https://vitorsfeijo.github.io/Substcck/).
 - Revisão inicial: `19bb0c497aae59a416e47014362cbbb81f8774b3`.
-- [CI inicial bem-sucedido](https://github.com/vitorsfeijo/Subtccstack/actions/runs/40576576470).
-- [Deploy inicial e smoke check bem-sucedidos](https://github.com/vitorsfeijo/Subtccstack/actions/runs/40576576264).
+- [CI inicial bem-sucedido](https://github.com/vitorsfeijo/Substcck/actions/runs/40576576470).
+- [Deploy inicial e smoke check bem-sucedidos](https://github.com/vitorsfeijo/Substcck/actions/runs/40576576264).
 - A URL pública foi conferida também fora do workflow: HTML, JavaScript e CSS disponíveis; interface renderizada e navegação/recarregamento por hash funcionando, sem exceções no navegador.
 
 ## Evidência local

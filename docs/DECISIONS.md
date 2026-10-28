@@ -14,7 +14,7 @@ Cadastro de TCC, login, uploads, feed com trabalhos reais e busca são entregas 
 | ------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Frontend                       | React, TypeScript e Vite                            | Gerar HTML/CSS/JavaScript estáticos e interface responsiva.                                                             |
 | Navegação                      | Rotas em hash                                       | Permitir abertura direta e recarregamento no Pages sem reescrita de rotas pelo servidor.                                |
-| Hospedagem do frontend         | GitHub Pages do repositório                         | Servir o build sob `/Subtccstack/`; esse prefixo deve ser configurável para forks e outros nomes de repositório.        |
+| Hospedagem do frontend         | GitHub Pages do repositório                         | Servir o build sob `/Substcck/`; esse prefixo deve ser configurável para forks e outros nomes de repositório.           |
 | CI/CD                          | GitHub Actions                                      | Validar a mesma revisão que será publicada e enviar apenas o artefato do frontend ao Pages.                             |
 | API                            | Node.js, TypeScript e Fastify                       | Validar requisições, aplicar negócio/autoria, integrar identidade e LUME e acessar banco/arquivos.                      |
 | Destino da API                 | Serviço externo no Render, com imagem de container  | Executar o processo de backend; a API não roda dentro do Pages ou de um job permanente de Actions.                      |
@@ -64,11 +64,11 @@ Não se cria aprovação obrigatória de professor: essa regra não foi especifi
 
 O M0 não concede login fictício nem implementa escrita de TCC. Um adaptador de identidade controlado para testes poderá existir exclusivamente em desenvolvimento/teste e nunca substituir a identidade real em produção. A produção deve recusar iniciar com configuração de autenticação simulada habilitada quando esse recurso for introduzido.
 
-O callback futuro da API terá caminho estável próprio, e o destino após login será a origem pública configurada do frontend, incluindo `/Subtccstack/` e a rota em hash apropriada. O registro do provedor deve usar exatamente a URL HTTPS efetiva do backend. Desenvolvimento pode usar callback local separado. Redirects de retorno ficam limitados à origem configurada, sem aceitar URL arbitrária enviada pelo visitante.
+O callback futuro da API terá caminho estável próprio, e o destino após login será a origem pública configurada do frontend, incluindo `/Substcck/` e a rota em hash apropriada. O registro do provedor deve usar exatamente a URL HTTPS efetiva do backend. Desenvolvimento pode usar callback local separado. Redirects de retorno ficam limitados à origem configurada, sem aceitar URL arbitrária enviada pelo visitante.
 
 ### Origem de API e configuração
 
-A API aceita a origem real do Pages (`https://vitorsfeijo.github.io`) e origens locais explicitamente configuradas para desenvolvimento; CORS compara origem, não o caminho `/Subtccstack/`. CORS não substitui autenticação/autoria. A interface usa somente URL pública de API e outros identificadores declaradamente públicos; conexão de banco, credenciais de R2 e segredos de identidade permanecem no backend.
+A API aceita a origem real do Pages (`https://vitorsfeijo.github.io`) e origens locais explicitamente configuradas para desenvolvimento; CORS compara origem, não o caminho `/Substcck/`. CORS não substitui autenticação/autoria. A interface usa somente URL pública de API e outros identificadores declaradamente públicos; conexão de banco, credenciais de R2 e segredos de identidade permanecem no backend.
 
 ## 4. Campos, limites e estados - D03, D06 e D15
 

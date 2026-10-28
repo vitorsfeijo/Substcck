@@ -633,15 +633,15 @@ O GitHub Pages publica arquivos estáticos; o workflow de Actions executa build/
 
 ### 16.3. Requisitos de publicação contínua
 
-| ID adicional | Requisito                                                                                                                                                                                          |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GH05         | Após push validado na branch principal, publicar automaticamente o artefato estático pelo fluxo oficial do GitHub Pages; permitir execução manual para uma revisão autorizada dessa branch.        |
-| GH06         | Usar o ambiente `github-pages`, permissões mínimas por job e `GITHUB_TOKEN`/identidade temporária do workflow para o deploy, sem token pessoal exposto no frontend.                                |
-| GH07         | Publicar somente a pasta de saída do build, excluindo configurações privadas, rascunhos, credenciais e arquivos internos que não pertençam ao site.                                                |
-| GH08         | Configurar Pages com a origem **GitHub Actions** e ajustar a URL base ao nome real do repositório. Para o remoto atual `vitorsfeijo/Subtccstack`, o caminho de projeto previsto é `/Subtccstack/`. |
-| GH09         | Configurar as URLs de retorno do login e as origens permitidas da API para o endereço real do Pages; callbacks de autenticação precisam funcionar no site publicado.                               |
-| GH10         | Validar após o deploy a página inicial e o carregamento do frontend, e conferir os fluxos integrados com o backend no ambiente real. Uma falha posterior deve ser visível na execução.             |
-| GH11         | Permitir recuperar a versão anterior por reversão de código e novo deploy validado; mudanças de banco precisam de estratégia própria de compatibilidade/recuperação.                               |
+| ID adicional | Requisito                                                                                                                                                                                    |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GH05         | Após push validado na branch principal, publicar automaticamente o artefato estático pelo fluxo oficial do GitHub Pages; permitir execução manual para uma revisão autorizada dessa branch.  |
+| GH06         | Usar o ambiente `github-pages`, permissões mínimas por job e `GITHUB_TOKEN`/identidade temporária do workflow para o deploy, sem token pessoal exposto no frontend.                          |
+| GH07         | Publicar somente a pasta de saída do build, excluindo configurações privadas, rascunhos, credenciais e arquivos internos que não pertençam ao site.                                          |
+| GH08         | Configurar Pages com a origem **GitHub Actions** e ajustar a URL base ao nome real do repositório. Para o remoto atual `vitorsfeijo/Substcck`, o caminho de projeto previsto é `/Substcck/`. |
+| GH09         | Configurar as URLs de retorno do login e as origens permitidas da API para o endereço real do Pages; callbacks de autenticação precisam funcionar no site publicado.                         |
+| GH10         | Validar após o deploy a página inicial e o carregamento do frontend, e conferir os fluxos integrados com o backend no ambiente real. Uma falha posterior deve ser visível na execução.       |
+| GH11         | Permitir recuperar a versão anterior por reversão de código e novo deploy validado; mudanças de banco precisam de estratégia própria de compatibilidade/recuperação.                         |
 
 As etapas e a separação build/deploy seguem a [documentação oficial de workflows para GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages). As versões concretas das actions serão escolhidas e fixadas na implementação.
 

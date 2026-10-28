@@ -10,7 +10,9 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](DELIVERY_M0.md) para evidências e limites; T14 em diante permanecem pendentes.
+**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](DELIVERY_M0.md) para evidências e limites; T14-T22 implementadas e validadas localmente; o fechamento remoto de M1 está em acompanhamento em [DELIVERY_M1.md](DELIVERY_M1.md). T23 em diante permanecem pendentes.
+
+**M1 em validação:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md). O fechamento exige as verificações e o CI/CD da revisão enviada; a conexão institucional real continua dependente de configuração autorizada.
 
 ### Regras para manter as entregas pequenas
 
@@ -102,7 +104,7 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T10 - Ajustar build e navegação para Pages
 
-- [x] Configurar URL base, caminhos de assets e navegação compatível com a hospedagem estática; para o remoto atual, validar o prefixo `/Subtccstack/`.
+- [x] Configurar URL base, caminhos de assets e navegação compatível com a hospedagem estática; para o remoto atual, validar o prefixo `/Substcck/`.
 - **Conclusão:** artefato servido nesse prefixo carrega página, CSS, JavaScript e imagens; abertura direta e recarregamento das rotas suportadas funcionam sem servidor de aplicação no Pages.
 - **Dependências:** T06 e T07. **Requisitos:** GH03 e GH08.
 
@@ -130,25 +132,25 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T14 - Persistir identidade e papéis
 
-- [ ] Implementar identidade de usuário e dados de aluno/professor: nome, e-mail, login institucional e matrícula/departamento conforme o modelo.
+- [x] Implementar identidade de usuário e dados de aluno/professor: nome, e-mail, login institucional e matrícula/departamento conforme o modelo.
 - **Conclusão:** a aplicação relaciona o usuário local à identidade institucional sem depender de nomes enviados livremente pelo cliente para provar autoria.
 - **Dependências:** T03 e T08.
 
 ### T15 - Implementar sessão e login
 
-- [ ] Conectar o adaptador institucional e criar entrada/saída de sessão; se necessário, implementar o adaptador local explicitamente identificado.
+- [x] Conectar o adaptador institucional e criar entrada/saída de sessão; se necessário, implementar o adaptador local explicitamente identificado.
 - **Conclusão:** login válido estabelece sessão; falha não concede acesso; o modo usado é identificável. Registrar separadamente se a integração real ainda depender de acesso externo.
 - **Dependências:** T07 e T14.
 
 ### T16 - Aplicar as permissões no servidor
 
-- [ ] Centralizar a autorização de escrita e de autoria, distinguindo consulta pública e dados privados do autor.
+- [x] Centralizar a autorização de escrita e de autoria, distinguindo consulta pública e dados privados do autor.
 - **Conclusão:** requisições diretas de visitante não escrevem dados; outro usuário não edita nem consulta rascunhos privados por conhecer o identificador.
 - **Dependências:** T15.
 
 ### T17 - Criar navegação de perfil e proteger ações
 
-- [ ] Exibir login/perfil e a ação “Cadastrar Novo TCC” para o papel autorizado, com saída de sessão.
+- [x] Exibir login/perfil e a ação “Cadastrar Novo TCC” para o papel autorizado, com saída de sessão.
 - **Conclusão:** visitante navega publicamente e usuário autorizado alcança o cadastro; a proteção visual acompanha a autorização do servidor.
 - **Dependências:** T16.
 
@@ -158,31 +160,31 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 
 ### T18 - Criar entidades e migração de TCC
 
-- [ ] Modelar TCC, vínculo com autor, orientador/coorientador, ano/semestre, link, resumo, status e visualizações; incluir os dados temporais decididos para o feed.
+- [x] Modelar TCC, vínculo com autor, orientador/coorientador, ano/semestre, link, resumo, status e visualizações; incluir os dados temporais decididos para o feed.
 - **Conclusão:** dados centrais persistem e os estados disponíveis são RASCUNHO e PUBLICADO; extensões temporais estão justificadas em D07.
 - **Dependências:** T04, T05, T08 e T14.
 
 ### T19 - Modelar tags, áreas e coleções
 
-- [ ] Persistir tags e associação às áreas; implementar a representação decidida para coleções e seus vínculos.
+- [x] Persistir tags e associação às áreas; implementar a representação decidida para coleções e seus vínculos.
 - **Conclusão:** o modelo atende classificação e todos os filtros de UC04; não deixa coleção apenas como um controle visual sem dados.
 - **Dependências:** T05 e T18.
 
 ### T20 - Implementar regras de publicação no domínio
 
-- [ ] Consolidar validações de campos e limites; representar transições de rascunho/publicação sem duplicar regras entre tela e servidor.
+- [x] Consolidar validações de campos e limites; representar transições de rascunho/publicação sem duplicar regras entre tela e servidor.
 - **Conclusão:** ausência de obrigatórios e limites excedidos são rejeitados; rascunho segue a matriz definida em T04.
 - **Dependências:** T18 e T19.
 
 ### T21 - Implementar repositórios de TCC e tags
 
-- [ ] Criar operações de salvar, buscar por ID, consultar por filtros e recuperar tags; separar consultas públicas das consultas privadas do autor.
+- [x] Criar operações de salvar, buscar por ID, consultar por filtros e recuperar tags; separar consultas públicas das consultas privadas do autor.
 - **Conclusão:** persistência e leitura funcionam, e consultas públicas excluem rascunhos na própria camada de acesso a dados ou política equivalente.
 - **Dependências:** T16, T18 e T19.
 
 ### T22 - Fechar DTOs e dados de demonstração
 
-- [ ] Completar contratos de cadastro, detalhe, feed e filtro com mídias, arquivo, link, status, coorientador e coleções conforme necessário; criar dados A-E do CT03.
+- [x] Completar contratos de cadastro, detalhe, feed e filtro com mídias, arquivo, link, status, coorientador e coleções conforme necessário; criar dados A-E do CT03.
 - **Conclusão:** contratos não perdem campos de RF#01; feed representa listas; cenário A-E pode ser carregado no ambiente de desenvolvimento/teste.
 - **Dependências:** T20 e T21. **Lacunas:** D10, D11 e D14.
 

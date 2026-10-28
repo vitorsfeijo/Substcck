@@ -4,6 +4,8 @@ Este registro atende T01 do [plano de implementação](IMPLEMENTATION_PLAN.md). 
 
 As relações abaixo indicam onde cada requisito será entregue e como será verificado. Não são uma declaração antecipada de que o recurso já funciona. M0 cobre T01-T13; o checklist do plano e o registro de evidências de execução devem indicar a conclusão real de cada tarefa.
 
+M1, correspondente a T14-T22, está em validação final. Seu escopo e suas dependências externas estão em [DELIVERY_M1.md](DELIVERY_M1.md). Identidade local simulada e provedor OIDC controlado nos testes não representam conexão institucional real com a UFRGS.
+
 ## 1. Requisitos funcionais, histórias e casos de uso
 
 | Origem                   | Comportamento esperado                                                                     | Contrato definido em M0                                                                                    | Implementação principal  | Evidência prevista                                                                        |
@@ -47,7 +49,7 @@ Esses casos não devem ser marcados como concluídos por testes apenas da saúde
 | ------------------- | --------------------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
 | GH01                | Instalação reproduzível, lint, tipos/compilação, testes e build em PR/push. | T09/T11.                            | Execução do CI para a revisão correspondente.                                      |
 | GH02                | Deploy condicionado ao sucesso da validação da mesma revisão.               | T11/T12.                            | Falha de validação impede publicação; artefato identifica o commit correto.        |
-| GH03                | Prefixo de projeto e URLs suportadas funcionam.                             | T10/T13.                            | Servir sob `/Subtccstack/`, abrir/recarregar rotas e carregar CSS/JS/imagens.      |
+| GH03                | Prefixo de projeto e URLs suportadas funcionam.                             | T10/T13.                            | Servir sob `/Substcck/`, abrir/recarregar rotas e carregar CSS/JS/imagens.         |
 | GH04                | PR não publica nem recebe segredos de produção.                             | T11/T12.                            | Eventos/permissões/condições dos workflows e execução de PR.                       |
 | GH05                | Push validado da principal publica; disparo manual controlado.              | T12/T13.                            | Deploy efetivo de revisão autorizada.                                              |
 | GH06                | Ambiente `github-pages` e permissões mínimas.                               | T12.                                | Workflow com identidade temporária e sem token pessoal no bundle.                  |
