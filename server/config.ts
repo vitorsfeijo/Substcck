@@ -5,6 +5,17 @@ export interface ServerConfig {
   corsOrigins: string[];
   databaseUrl?: string;
   dataDir: string;
+  storage: {
+    driver: 'local' | 's3' | 'unconfigured';
+    localDirectory: string;
+    s3?: {
+      endpoint: string;
+      bucket: string;
+      region: string;
+      accessKeyId: string;
+      secretAccessKey: string;
+    };
+  };
   auth: {
     mode: 'disabled' | 'development' | 'oidc';
     frontendUrl: string;
@@ -141,6 +152,42 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
       loginClaim: env.OIDC_LOGIN_CLAIM || 'preferred_username',
     };
   }
+  const driver =
+    env.STORAGE_DRIVER ||
+    (environment === 'production' ? 'unconfigured' : 'local');
+  if (!['local', 's3', 'unconfigured'].includes(driver))
+    throw new Error('STORAGE_DRIVER inválido.');
+  if (environment === 'production' && driver === 'local')
+    throw new Error(
+      'Produção exige armazenamento S3 privado; o disco local é exclusivo de desenvolvimento.',
+    );
+  let s3: ServerConfig['storage']['s3'];
+  if (driver === 's3') {
+    for (const key of [
+      'S3_ENDPOINT',
+      'S3_BUCKET',
+      'S3_ACCESS_KEY_ID',
+      'S3_SECRET_ACCESS_KEY',
+    ]) {
+      if (!env[key]) throw new Error(`Armazenamento S3 exige ${key}.`);
+    }
+    const endpoint = new URL(env.S3_ENDPOINT!);
+    if (
+      endpoint.protocol !== 'https:' ||
+      endpoint.username ||
+      endpoint.password ||
+      endpoint.search ||
+      endpoint.hash
+    )
+      throw new Error('S3_ENDPOINT deve usar HTTPS e não conter credenciais.');
+    s3 = {
+      endpoint: endpoint.href,
+      bucket: env.S3_BUCKET!,
+      region: env.S3_REGION || 'auto',
+      accessKeyId: env.S3_ACCESS_KEY_ID!,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY!,
+    };
+  }
   return {
     environment: environment as ServerConfig['environment'],
     host,
@@ -148,6 +195,11 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     corsOrigins,
     databaseUrl: env.DATABASE_URL || undefined,
     dataDir: env.PGLITE_DATA_DIR || './.cache/data/dev',
+    storage: {
+      driver: driver as ServerConfig['storage']['driver'],
+      localDirectory: env.UPLOAD_DIRECTORY || './.cache/uploads',
+      s3,
+    },
     auth: {
       mode: mode as ServerConfig['auth']['mode'],
       frontendUrl,
