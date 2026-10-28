@@ -5,6 +5,23 @@ const configuredApiUrl = process.env.VITE_API_URL?.trim().replace(/\/+$/, '');
 test.beforeEach(async ({ page }) => {
   if (!configuredApiUrl) return;
 
+  for (const [endpoint, body] of Object.entries({
+    'auth/config': { mode: 'disabled', loginUrl: null },
+    'auth/session': { user: null, csrfToken: null, mode: 'disabled' },
+  })) {
+    await page.route(`${configuredApiUrl}/${endpoint}`, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: {
+          'access-control-allow-origin': 'http://127.0.0.1:4173',
+          'access-control-allow-credentials': 'true',
+        },
+        body: JSON.stringify(body),
+      }),
+    );
+  }
+
   // Build checks must not depend on or send requests to the deployed backend.
   const healthUrl = new URL(
     `${configuredApiUrl}/health`,
@@ -48,7 +65,7 @@ test('a página inicial carrega no prefixo do Pages sem erros ou recursos ausent
       name: /Tornar conhecimento visível/,
     }),
   ).toBeVisible();
-  await expect(page).toHaveTitle('Subtccstack — Conhecimento que circula');
+  await expect(page).toHaveTitle('Substcck — Conhecimento que circula');
   await expect(
     page.getByRole('img', {
       name: /Ilustração conceitual de um TCC conectando/,
@@ -69,14 +86,14 @@ test('a navegação por hash abre a proposta e permite voltar ao início', async
     .getByRole('link', { name: 'Sobre o projeto' })
     .click();
 
-  await expect(page).toHaveURL(/\/Subtccstack\/#\/sobre$/);
+  await expect(page).toHaveURL(/\/Substcck\/#\/sobre$/);
   await expect(
     page.getByRole('heading', { level: 1, name: /Uma pesquisa pode/ }),
   ).toBeVisible();
   await expect(page.locator('main')).toBeFocused();
 
   await page.getByRole('link', { name: 'Voltar ao início' }).click();
-  await expect(page).toHaveURL(/\/Subtccstack\/#\/$/);
+  await expect(page).toHaveURL(/\/Substcck\/#\/$/);
   await expect(
     page.getByRole('heading', {
       level: 1,
@@ -94,8 +111,8 @@ test('a abertura direta e o recarregamento de Sobre funcionam em hospedagem est�
   ).toBeVisible();
   await page.reload();
 
-  await expect(page).toHaveURL(/\/Subtccstack\/#\/sobre$/);
-  await expect(page).toHaveTitle('Sobre — Subtccstack');
+  await expect(page).toHaveURL(/\/Substcck\/#\/sobre$/);
+  await expect(page).toHaveTitle('Sobre — Substcck');
   const unconfiguredMessage = page.getByText(
     'O site está disponível. A conexão com o serviço de dados ainda será configurada.',
     { exact: true },

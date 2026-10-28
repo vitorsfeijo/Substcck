@@ -1,21 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
 import { PlatformStatus } from './components/PlatformStatus';
 import { ResearchMap } from './components/ResearchMap';
+import { useAuth } from './auth/context';
+import { LoginPage, NewTccPage, ProfilePage } from './components/AccountPages';
 
-function getRoute() {
-  return window.location.hash === '#/sobre' ? 'about' : 'home';
+type Route = 'home' | 'about' | 'login' | 'profile' | 'new-tcc';
+
+function getRoute(): Route {
+  const path = window.location.hash.split('?')[0];
+  if (path === '#/sobre') return 'about';
+  if (path === '#/entrar') return 'login';
+  if (path === '#/perfil') return 'profile';
+  if (path === '#/novo-tcc') return 'new-tcc';
+  return 'home';
 }
 
 function Wordmark() {
   return (
-    <a className="wordmark" href="#/" aria-label="Subtccstack — início">
+    <a className="wordmark" href="#/" aria-label="Substcck — início">
       <span className="brand-symbol" aria-hidden="true">
         <i />
         <i />
         <i />
       </span>
       <span>
-        sub<span className="brand-accent">tcc</span>stack
+        Sub<span className="brand-accent">stcc</span>k
         <span className="brand-period">.</span>
       </span>
     </a>
@@ -183,23 +192,24 @@ function About() {
         <em>muitas outras.</em>
       </h1>
       <p className="about-intro">
-        O Subtccstack nasce para aproximar a comunidade dos trabalhos de
-        conclusão de curso do Instituto de Informática da UFRGS. Uma forma mais
-        visual e acessível de descobrir o que está sendo pesquisado — e perceber
-        como as ideias se conectam.
+        O Substcck nasce para aproximar a comunidade dos trabalhos de conclusão
+        de curso do Instituto de Informática da UFRGS. Uma forma mais visual e
+        acessível de descobrir o que está sendo pesquisado — e perceber como as
+        ideias se conectam.
       </p>
       <div className="about-grid">
         <section aria-labelledby="delivery-title">
-          <span className="tiny-label">PRIMEIRA ENTREGA</span>
+          <span className="tiny-label">SEGUNDA ENTREGA</span>
           <h2 id="delivery-title">A base para o que vem.</h2>
           <p>
-            Esta versão inaugura o site e sua estrutura técnica. O catálogo, a
-            busca e a publicação de trabalhos serão desenvolvidos nas próximas
-            entregas.
+            Esta versão acrescenta a base de autenticação, os perfis de acesso e
+            a persistência dos trabalhos. O catálogo, a busca e a publicação
+            serão desenvolvidos nas próximas entregas.
           </p>
           <p>
-            O acesso institucional ainda não está disponível. Esta página não
-            recebe cadastros nem publica trabalhos.
+            O acesso institucional de produção ainda precisa ser conectado ao
+            provedor da universidade. Esta página não recebe cadastros nem
+            publica trabalhos.
           </p>
           <PlatformStatus />
         </section>
@@ -217,7 +227,7 @@ function About() {
           </p>
           <p>
             O LUME permanece como referência institucional dos documentos
-            oficiais. O Subtccstack propõe uma nova porta de entrada para esse
+            oficiais. O Substcck propõe uma nova porta de entrada para esse
             conhecimento.
           </p>
           <a className="text-link" href="https://lume.ufrgs.br">
@@ -233,6 +243,7 @@ function About() {
 }
 
 export default function App() {
+  const auth = useAuth();
   const [route, setRoute] = useState(getRoute);
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
@@ -244,10 +255,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title =
-      route === 'about'
-        ? 'Sobre — Subtccstack'
-        : 'Subtccstack — Conhecimento que circula';
+    const titles = {
+      home: 'Substcck — Conhecimento que circula',
+      about: 'Sobre — Substcck',
+      login: 'Entrar — Substcck',
+      profile: 'Meu perfil — Substcck',
+      'new-tcc': 'Novo TCC — Substcck',
+    };
+    document.title = titles[route];
     if (firstRender.current) {
       firstRender.current = false;
       return;
@@ -280,6 +295,17 @@ export default function App() {
           >
             Sobre o projeto
           </a>
+          <a
+            href={auth.user ? '#/perfil' : '#/entrar'}
+            aria-current={
+              route === 'profile' || route === 'login' || route === 'new-tcc'
+                ? 'page'
+                : undefined
+            }
+            className="account-nav"
+          >
+            {auth.user ? 'Meu perfil' : 'Entrar'}
+          </a>
         </nav>
         <span className="header-institution">
           INFORMÁTICA
@@ -288,7 +314,17 @@ export default function App() {
         </span>
       </header>
       <main id="main-content" tabIndex={-1} ref={mainRef}>
-        {route === 'about' ? <About /> : <Home />}
+        {route === 'about' ? (
+          <About />
+        ) : route === 'login' ? (
+          <LoginPage />
+        ) : route === 'profile' ? (
+          <ProfilePage />
+        ) : route === 'new-tcc' ? (
+          <NewTccPage />
+        ) : (
+          <Home />
+        )}
       </main>
       <footer className="site-footer">
         <div className="section-shell footer-inner">
