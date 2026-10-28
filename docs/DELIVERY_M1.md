@@ -1,8 +1,8 @@
 # Entrega M1 - Autenticação e domínio persistente
 
-**Estado:** T14-T22 implementadas e verificadas localmente. CI/CD e publicação da revisão estão em acompanhamento; a integração real com a UFRGS continua como dependência externa.
+**Estado:** M1 concluído. T14-T22 implementadas, verificadas localmente e pelo GitHub Actions; frontend publicado e conferido na nova URL. A integração real com a UFRGS continua como dependência externa explícita.
 
-O aplicativo passa a se chamar **Substcck**. A entrega inclui a renomeação do repositório para `vitorsfeijo/Substcck`, a alteração do prefixo para `/Substcck/` e a [nova URL do Pages](https://vitorsfeijo.github.io/Substcck/). A mudança e o deploy precisam de confirmação antes do fechamento do marco. Identificadores técnicos existentes de serviço, cookies e emissor local são mantidos para compatibilidade.
+O aplicativo passa a se chamar **Substcck**. A entrega inclui a renomeação do repositório para `vitorsfeijo/Substcck`, a alteração do prefixo para `/Substcck/` e a [nova URL do Pages](https://vitorsfeijo.github.io/Substcck/). A renomeação, o remoto Git e a publicação foram confirmados. Identificadores técnicos existentes de serviço, cookies e emissor local são mantidos para compatibilidade.
 
 ## Escopo implementado
 
@@ -59,4 +59,11 @@ O navegador também foi exercitado com a API Fastify e o banco PGlite reais do a
 
 ## Evidência remota
 
-A confirmação da revisão enviada, das execuções de CI/deploy e da URL pública será registrada após a conclusão do pipeline. A integração institucional real não é atestada por testes com provedor controlado.
+- Revisão de implementação/documentação verificada: `11b5dcb4846ba66563d43d353f65d3380f21a895`.
+- [CI bem-sucedido](https://github.com/vitorsfeijo/Substcck/actions/runs/40611953499).
+- [Deploy Pages e checagem pós-deploy bem-sucedidos](https://github.com/vitorsfeijo/Substcck/actions/runs/40611953437).
+- [Repositório renomeado](https://github.com/vitorsfeijo/Substcck), com remoto local `https://github.com/vitorsfeijo/Substcck.git`.
+- [Site publicado](https://vitorsfeijo.github.io/Substcck/), conferido também no navegador: marca Substcck, assets no prefixo correto, entrada e recarregamento, redirecionamento de perfil privado e ausência de personas de desenvolvimento no site de produção.
+- Auditoria das dependências de produção sem vulnerabilidades conhecidas em 27/10/2026.
+
+A documentação de fechamento é um commit posterior, sem mudança de comportamento da aplicação. A integração institucional real não é atestada pelos testes com provedor controlado nem pela publicação do frontend.

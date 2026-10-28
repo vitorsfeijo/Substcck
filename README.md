@@ -4,7 +4,7 @@ Proposta de plataforma mobile/web para divulgar, buscar e relacionar TCCs do Ins
 
 **Site:** [vitorsfeijo.github.io/Substcck](https://vitorsfeijo.github.io/Substcck/).
 
-**Status:** M0 publicado; M1 em validação final, com autenticação configurável, perfis e domínio persistente. Cadastro/publicação e busca na interface continuam nos próximos marcos. A renomeação do repositório e da URL para `Substcck` integra esta entrega e aguarda confirmação do deploy.
+**Status:** M0 e M1 concluídos, com autenticação configurável, perfis, domínio persistente e CI/CD verificados. App, repositório e Pages renomeados para **Substcck**. Cadastro/publicação e busca na interface continuam nos próximos marcos; o login institucional real ainda requer configuração externa.
 
 **Stack:** React + TypeScript + Vite; API Node.js/Fastify; PostgreSQL. Frontend no GitHub Pages, com CI/CD pelo GitHub Actions. Backend de produção ainda não provisionado.
 

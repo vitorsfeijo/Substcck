@@ -2,7 +2,7 @@
 
 ## Estado e destino
 
-O frontend gera arquivos estáticos para o GitHub Pages. O M0 está publicado em [vitorsfeijo.github.io/Substcck](https://vitorsfeijo.github.io/Substcck/), com CI, deploy e verificação pós-deploy bem-sucedidos. As evidências estão em [DELIVERY_M0.md](DELIVERY_M0.md). Para versões futuras, a existência dos workflows, isoladamente, não comprova uma nova publicação.
+O frontend gera arquivos estáticos para o GitHub Pages. As entregas M0 e M1 estão publicadas em [vitorsfeijo.github.io/Substcck](https://vitorsfeijo.github.io/Substcck/), com CI, deploy e verificação pós-deploy bem-sucedidos. As evidências estão em [DELIVERY_M0.md](DELIVERY_M0.md) e [DELIVERY_M1.md](DELIVERY_M1.md). Para versões futuras, a existência dos workflows, isoladamente, não comprova uma nova publicação.
 
 API, banco, autenticação institucional e armazenamento são serviços externos ao Pages. Consulte [DECISIONS.md](DECISIONS.md). Sem a variável pública de API, o frontend continua acessível e informa a ausência de integração; não simula um banco compartilhado nem autenticação real.
 

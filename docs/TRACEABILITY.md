@@ -4,7 +4,7 @@ Este registro atende T01 do [plano de implementação](IMPLEMENTATION_PLAN.md). 
 
 As relações abaixo indicam onde cada requisito será entregue e como será verificado. Não são uma declaração antecipada de que o recurso já funciona. M0 cobre T01-T13; o checklist do plano e o registro de evidências de execução devem indicar a conclusão real de cada tarefa.
 
-M1, correspondente a T14-T22, está em validação final. Seu escopo e suas dependências externas estão em [DELIVERY_M1.md](DELIVERY_M1.md). Identidade local simulada e provedor OIDC controlado nos testes não representam conexão institucional real com a UFRGS.
+M1, correspondente a T14-T22, foi entregue com testes e CI/CD bem-sucedidos. Seu escopo, evidências e dependências externas estão em [DELIVERY_M1.md](DELIVERY_M1.md). Identidade local simulada e provedor OIDC controlado nos testes não representam conexão institucional real com a UFRGS.
 
 ## 1. Requisitos funcionais, histórias e casos de uso
 

@@ -10,9 +10,9 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](DELIVERY_M0.md) para evidências e limites; T14-T22 implementadas e validadas localmente; o fechamento remoto de M1 está em acompanhamento em [DELIVERY_M1.md](DELIVERY_M1.md). T23 em diante permanecem pendentes.
+**Estado atual:** M0 concluído: T01-T13 implementadas, verificadas localmente e pelo GitHub Actions, com frontend publicado no Pages. Veja [a entrega M0](DELIVERY_M0.md) para evidências e limites; M1 concluído: T14-T22 implementadas, validadas localmente e pelo CI/CD. Evidências e limites em [DELIVERY_M1.md](DELIVERY_M1.md). T23 em diante permanecem pendentes.
 
-**M1 em validação:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md). O fechamento exige as verificações e o CI/CD da revisão enviada; a conexão institucional real continua dependente de configuração autorizada.
+**M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
 ### Regras para manter as entregas pequenas
 
@@ -188,7 +188,7 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 - **Conclusão:** contratos não perdem campos de RF#01; feed representa listas; cenário A-E pode ser carregado no ambiente de desenvolvimento/teste.
 - **Dependências:** T20 e T21. **Lacunas:** D10, D11 e D14.
 
-**Saída da etapa / M1:** domínio e persistência disponíveis com acesso controlado. Testes cobrem limites e exclusão de rascunhos, sem depender da interface.
+**Saída da etapa / M1:** concluída, com domínio e persistência disponíveis e acesso controlado. Testes cobrem limites, autoria e exclusão de rascunhos; o adaptador institucional foi validado com provedor controlado, permanecendo pendente a integração real UFRGS. Veja [DELIVERY_M1.md](DELIVERY_M1.md).
 
 ## 6. Etapa 5 - Validação LUME e publicação
 
@@ -451,7 +451,7 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 - **Conclusão:** registrar URL efetiva e execução bem-sucedida; verificar visitante, autor, persistência entre sessões/usuários autorizados, privacidade de rascunhos e anexos, filtros e download. Uma falha pós-deploy aparece no workflow; limitações institucionais reais permanecem explícitas. README aponta ao site publicado somente após confirmação da URL.
 - **Dependências:** T13 e T59. **Requisitos:** GH09-GH11.
 
-**Saída da etapa / M5:** site da aplicação publicado no GitHub Pages, integrado aos serviços externos e verificável via CI/CD. M0 está em execução conforme o registro de entrega; os marcos posteriores permanecem neste plano e não são considerados concluídos pela implementação da base.
+**Saída da etapa / M5:** site da aplicação publicado no GitHub Pages, integrado aos serviços externos e verificável via CI/CD. M0 e M1 foram entregues conforme seus registros; M2 a M5 permanecem pendentes neste plano e não são considerados concluídos pela implementação da base.
 
 ## 14. Matriz de cobertura do plano
 
