@@ -18,6 +18,7 @@ import type { AttachmentStore } from './models/attachments.js';
 import type { LumeValidator } from './services/lume.js';
 import { createLumeValidator } from './services/lume.js';
 import { attachmentController } from './controllers/attachments.js';
+import { discoveryController } from './controllers/discovery.js';
 import { requireCsrf, requireStudent } from './auth/access.js';
 
 export async function createApp(
@@ -65,6 +66,7 @@ export async function createApp(
   );
   platformController(app, repository, config);
   if (dependencies.database) {
+    discoveryController(app, dependencies.database, config);
     tccController(
       app,
       dependencies.database,
