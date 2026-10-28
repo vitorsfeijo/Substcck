@@ -531,6 +531,16 @@ export function TccEditor({ workId }: { workId?: string }) {
             <a className="text-link" href="#/perfil">
               Ver meus trabalhos ↗
             </a>
+            {work?.status === 'PUBLICADO' && (
+              <p>
+                <a
+                  className="text-link"
+                  href={`#/tcc/${encodeURIComponent(work.id)}`}
+                >
+                  Ler publicação ↗
+                </a>
+              </p>
+            )}
           </div>
         )}
         {lumeFailure && (

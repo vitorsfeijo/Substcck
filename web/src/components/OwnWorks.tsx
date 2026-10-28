@@ -86,15 +86,25 @@ export function OwnWorks({ userId }: { userId: string }) {
                     {work.tags.map((tag) => tag.name).join(', ') || 'Sem tags'}
                   </p>
                 </div>
-                <a
-                  className="text-link"
-                  href={`#/editar-tcc/${encodeURIComponent(work.id)}`}
-                >
-                  {work.status === 'RASCUNHO'
-                    ? 'Retomar rascunho'
-                    : 'Editar TCC'}{' '}
-                  <span aria-hidden="true">↗</span>
-                </a>
+                <div className="own-work-actions">
+                  {work.status === 'PUBLICADO' && (
+                    <a
+                      className="text-link"
+                      href={`#/tcc/${encodeURIComponent(work.id)}`}
+                    >
+                      Ler publicação <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                  <a
+                    className="text-link"
+                    href={`#/editar-tcc/${encodeURIComponent(work.id)}`}
+                  >
+                    {work.status === 'RASCUNHO'
+                      ? 'Retomar rascunho'
+                      : 'Editar TCC'}{' '}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
               </li>
             ))}
           </ul>

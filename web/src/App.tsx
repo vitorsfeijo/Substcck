@@ -3,8 +3,19 @@ import { PlatformStatus } from './components/PlatformStatus';
 import { ResearchMap } from './components/ResearchMap';
 import { useAuth } from './auth/context';
 import { LoginPage, NewTccPage, ProfilePage } from './components/AccountPages';
+import { DiscoveryFeed } from './components/DiscoveryFeed';
+import { SearchPage } from './components/SearchPage';
+import { ReadingPage } from './components/ReadingPage';
 
-type Route = 'home' | 'about' | 'login' | 'profile' | 'new-tcc' | 'edit-tcc';
+type Route =
+  | 'home'
+  | 'about'
+  | 'login'
+  | 'profile'
+  | 'new-tcc'
+  | 'edit-tcc'
+  | 'search'
+  | 'reading';
 
 function getRoute(): Route {
   const path = window.location.hash.split('?')[0];
@@ -13,7 +24,18 @@ function getRoute(): Route {
   if (path === '#/perfil') return 'profile';
   if (path === '#/novo-tcc') return 'new-tcc';
   if (/^#\/editar-tcc\/[^/?]+$/.test(path)) return 'edit-tcc';
+  if (path === '#/buscar') return 'search';
+  if (/^#\/tcc\/[^/?]+$/.test(path)) return 'reading';
   return 'home';
+}
+
+function workIdFrom(hash: string) {
+  const id = hash.split('?')[0].split('/')[2];
+  try {
+    return decodeURIComponent(id);
+  } catch {
+    return id;
+  }
 }
 
 function Wordmark() {
@@ -92,44 +114,7 @@ function Home() {
         </div>
       </div>
 
-      <section
-        id="catalogo"
-        className="catalog section-shell"
-        aria-labelledby="catalog-title"
-      >
-        <div className="section-heading">
-          <p className="eyebrow">UM ACERVO, MUITAS POSSIBILIDADES</p>
-          <h2 id="catalog-title">
-            O próximo capítulo
-            <br />
-            da sua curiosidade.
-          </h2>
-          <p>
-            Do primeiro interesse à próxima referência. <br />
-            Pesquisas feitas para serem encontradas.
-          </p>
-        </div>
-        <div className="catalog-empty">
-          <div className="empty-illustration" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <b>+</b>
-          </div>
-          <div>
-            <span className="tiny-label">EM CONSTRUÇÃO</span>
-            <h3>Estamos preparando o catálogo.</h3>
-            <p>
-              Em breve, trabalhos, pessoas e ideias vão se encontrar por aqui.
-              Enquanto isso, a produção acadêmica da UFRGS continua disponível
-              no LUME.
-            </p>
-            <a className="text-link" href="https://lume.ufrgs.br">
-              Conhecer o repositório LUME <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
-      </section>
+      <DiscoveryFeed />
 
       <section
         className="purpose section-shell"
@@ -200,12 +185,12 @@ function About() {
       </p>
       <div className="about-grid">
         <section aria-labelledby="delivery-title">
-          <span className="tiny-label">TERCEIRA ENTREGA</span>
+          <span className="tiny-label">QUARTA ENTREGA</span>
           <h2 id="delivery-title">A base para o que vem.</h2>
           <p>
-            Esta versão permite cadastrar, ilustrar, publicar e editar
-            trabalhos, além de salvar rascunhos privados. O catálogo e a busca
-            na interface serão desenvolvidos na próxima entrega.
+            Esta versão permite descobrir, pesquisar e ler trabalhos, baixar
+            artigos anexados e acompanhar os temas mais explorados. Autores
+            podem publicar, editar e manter rascunhos privados.
           </p>
           <p>
             O acesso institucional de produção ainda precisa ser conectado ao
@@ -267,6 +252,8 @@ export default function App() {
       profile: 'Meu perfil — Substcck',
       'new-tcc': 'Novo TCC — Substcck',
       'edit-tcc': 'Editar TCC — Substcck',
+      search: 'Buscar TCC — Substcck',
+      reading: 'Leitura — Substcck',
     };
     document.title = titles[route];
     if (firstRender.current) {
@@ -294,6 +281,12 @@ export default function App() {
         <nav aria-label="Navegação principal">
           <a href="#/" aria-current={route === 'home' ? 'page' : undefined}>
             Descobrir
+          </a>
+          <a
+            href="#/buscar"
+            aria-current={route === 'search' ? 'page' : undefined}
+          >
+            Buscar TCC
           </a>
           <a
             href="#/sobre"
@@ -329,20 +322,23 @@ export default function App() {
           <LoginPage />
         ) : route === 'profile' ? (
           <ProfilePage />
+        ) : route === 'search' ? (
+          <SearchPage
+            query={hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : ''}
+          />
+        ) : route === 'reading' ? (
+          <ReadingPage
+            key={workIdFrom(hash)}
+            workId={workIdFrom(hash)}
+            returnTo={
+              new URLSearchParams(hash.split('?').slice(1).join('?')).get(
+                'from',
+              ) || undefined
+            }
+          />
         ) : route === 'new-tcc' || route === 'edit-tcc' ? (
           <NewTccPage
-            workId={
-              route === 'edit-tcc'
-                ? (() => {
-                    const id = hash.split('?')[0].split('/')[2];
-                    try {
-                      return decodeURIComponent(id);
-                    } catch {
-                      return id;
-                    }
-                  })()
-                : undefined
-            }
+            workId={route === 'edit-tcc' ? workIdFrom(hash) : undefined}
           />
         ) : (
           <Home />
