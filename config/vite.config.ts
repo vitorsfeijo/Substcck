@@ -10,9 +10,14 @@ export default defineConfig(({ mode }) => {
     root: resolve(projectRoot, 'web'),
     envDir: projectRoot,
     plugins: [react()],
-    base: env.VITE_BASE_PATH || '/Subtccstack/',
+    base: env.VITE_BASE_PATH || '/Substcck/',
     build: {
-      outDir: resolve(projectRoot, '.cache/build/web'),
+      outDir: resolve(
+        projectRoot,
+        process.env.SUBTCCSTACK_BUILD_TARGET === 'auth-test'
+          ? '.cache/build/auth-web'
+          : '.cache/build/web',
+      ),
       emptyOutDir: true,
     },
     server: {

@@ -1,5 +1,5 @@
 {
-  "name": "subtccstack",
+  "name": "substcck",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail -n web,api \"npm:dev:web\" \"npm:dev:api\"",
-    "check": "npm run lint && npm test && npm run db:verify && npm run build:api && npm run build && npm run check:pages && npm run test:e2e",
+    "check": "npm run lint && npm test && npm run db:verify && npm run build:api && npm run build && npm run check:pages && npm run test:e2e && npm run test:e2e:auth",
     "dev:web": "vite --config config/vite.config.ts --host 127.0.0.1",
     "dev:api": "tsx watch --env-file-if-exists=.env server/index.ts",
     "build": "npm run typecheck && vite build --config config/vite.config.ts",
@@ -20,11 +20,12 @@
     "typecheck": "tsc -p config/tsconfig.app.json && tsc -p config/tsconfig.server.json --noEmit && tsc -p config/tsconfig.tools.json",
     "test": "vitest run --config config/vitest.config.ts",
     "test:e2e": "playwright test --config config/playwright.config.ts",
+    "test:e2e:auth": "node scripts/test-auth-ui.mjs",
     "db:migrate": "tsx --env-file-if-exists=.env server/scripts/migrate.ts",
     "db:verify": "tsx --env-file-if-exists=.env server/scripts/verify.ts",
+    "db:seed": "tsx --env-file-if-exists=.env server/scripts/seed.ts",
     "check:pages": "node scripts/check-pages.mjs",
-    "check:live": "node scripts/check-live.mjs",
-    "db:seed": "tsx --env-file-if-exists=.env server/scripts/seed.ts"
+    "check:live": "node scripts/check-live.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.5.12",

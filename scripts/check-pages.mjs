@@ -3,7 +3,7 @@ import { readdir, readFile, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export function normalizeBase(value = '/Subtccstack/') {
+export function normalizeBase(value = '/Substcck/') {
   assert(
     value.startsWith('/') && value.endsWith('/'),
     'VITE_BASE_PATH must start and end with /.',
@@ -30,7 +30,7 @@ export function assetPaths(html) {
 
 export async function checkPages(
   directory = '.cache/build/web',
-  basePath = process.env.VITE_BASE_PATH || '/Subtccstack/',
+  basePath = process.env.VITE_BASE_PATH || '/Substcck/',
 ) {
   const base = normalizeBase(basePath);
   const root = path.resolve(directory);

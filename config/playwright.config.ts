@@ -7,7 +7,7 @@ export default defineConfig({
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
   use: {
-    baseURL: 'http://127.0.0.1:4173/Subtccstack/',
+    baseURL: 'http://127.0.0.1:4173/Substcck/',
     trace: 'retain-on-failure',
   },
   projects: [
@@ -17,7 +17,7 @@ export default defineConfig({
   webServer: {
     cwd: resolve(import.meta.dirname, '..'),
     command: 'npm run preview',
-    url: 'http://127.0.0.1:4173/Subtccstack/',
+    url: 'http://127.0.0.1:4173/Substcck/',
     reuseExistingServer: !process.env.CI,
   },
 });

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: subtccstack-api
+    name: substcck-api
     runtime: docker
     dockerfilePath: ./infra/Dockerfile
     dockerContext: .
