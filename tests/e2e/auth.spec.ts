@@ -41,6 +41,7 @@ async function mockAuth(
       collections: [],
     },
     'me/tccs': { items: [], total: 0, page: 1, pageSize: 20 },
+    feed: { recent: [], topics: [], windowDays: 30 },
   })) {
     await page.route(`${api}/${endpoint}`, (route) =>
       route.fulfill({

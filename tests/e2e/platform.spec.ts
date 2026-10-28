@@ -8,6 +8,7 @@ test.beforeEach(async ({ page }) => {
   for (const [endpoint, body] of Object.entries({
     'auth/config': { mode: 'disabled', loginUrl: null },
     'auth/session': { user: null, csrfToken: null, mode: 'disabled' },
+    feed: { recent: [], topics: [], windowDays: 30 },
   })) {
     await page.route(`${configuredApiUrl}/${endpoint}`, (route) =>
       route.fulfill({
@@ -140,9 +141,20 @@ test('o catálogo é alcançável e a navegação funciona pelo teclado', async 
 }) => {
   await page.goto('./');
   await page.getByRole('button', { name: 'Explorar o catálogo' }).click();
-  await expect(
-    page.getByRole('heading', { name: 'Estamos preparando o catálogo.' }),
-  ).toBeInViewport();
+  await expect(page.locator('#catalogo')).toBeInViewport();
+  if (configuredApiUrl) {
+    await expect(
+      page.getByRole('heading', {
+        name: 'O acervo começa com a próxima pesquisa.',
+      }),
+    ).toBeVisible();
+  } else {
+    await expect(
+      page.getByRole('heading', {
+        name: 'O acervo ainda precisa ser conectado.',
+      }),
+    ).toBeVisible();
+  }
   await expect(
     page.getByRole('link', { name: 'Conhecer o repositório LUME' }),
   ).toHaveAttribute('href', 'https://lume.ufrgs.br');
@@ -151,6 +163,10 @@ test('o catálogo é alcançável e a navegação funciona pelo teclado', async 
     name: 'Navegação principal',
   });
   await navigation.getByRole('link', { name: 'Descobrir' }).focus();
+  await page.keyboard.press('Tab');
+  await expect(
+    navigation.getByRole('link', { name: 'Buscar TCC' }),
+  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(
     navigation.getByRole('link', { name: 'Sobre o projeto' }),

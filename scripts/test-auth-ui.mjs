@@ -20,6 +20,7 @@ for (const args of [
     'config/playwright.config.ts',
     'auth.spec.ts',
     'editor.spec.ts',
+    'discovery.spec.ts',
   ],
 ]) {
   const result = spawnSync(process.execPath, args, { env, stdio: 'inherit' });
