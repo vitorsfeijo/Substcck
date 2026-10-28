@@ -26,7 +26,9 @@ function requiredString(claims: Record<string, unknown>, name: string): string {
   if (typeof value !== 'string' || !value.trim()) {
     throw new Error('Identidade institucional incompleta.');
   }
-  return value.trim();
+  // Subject identifiers are opaque. Validate non-emptiness without normalizing
+  // the provider's value; profile display normalization belongs in persistence.
+  return value;
 }
 
 /** Claims have already passed signature, issuer, audience, lifetime and nonce checks. */

@@ -49,6 +49,33 @@ describe('verified identity persistence', () => {
     expect(otherIssuer.id).not.toBe(first.id);
   });
 
+  it('preserves opaque subjects so surrounding whitespace cannot merge identities', async () => {
+    const repository = createIdentityRepository(db);
+    const commonClaims = {
+      iss: 'https://opaque-subject.example',
+      sub: 'opaque-identifier',
+      name: 'Verified student',
+      email: 'student@example.invalid',
+      email_verified: true,
+      preferred_username: 'verified-login',
+      role: 'student',
+      enrollment: '123456',
+    };
+    const plain = identityFromClaims(commonClaims, {
+      issuer: commonClaims.iss,
+    });
+    const spaced = identityFromClaims(
+      { ...commonClaims, sub: ' opaque-identifier ' },
+      { issuer: commonClaims.iss },
+    );
+    expect(spaced.issuer).toBe(commonClaims.iss);
+    expect(spaced.subject).toBe(' opaque-identifier ');
+    const first = await repository.upsert(plain);
+    const second = await repository.upsert(spaced);
+    expect(second.id).not.toBe(first.id);
+    expect((await repository.upsert(spaced)).id).toBe(second.id);
+  });
+
   it('does not accept an unrecognized role or missing institutional affiliation', async () => {
     const repository = createIdentityRepository(db);
     const identity = getDevelopmentIdentity('researcher');
