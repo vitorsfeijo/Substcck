@@ -129,7 +129,9 @@ test('a abertura direta e o recarregamento de Sobre funcionam em hospedagem est�
     await expect(connectedMessage).toHaveCount(0);
   }
   await expect(
-    page.getByText(/Esta página não recebe cadastros nem publica trabalhos/),
+    page.getByText(
+      'O cadastro e a publicação exigem uma API configurada e um perfil de aluno autorizado.',
+    ),
   ).toBeVisible();
 });
 

@@ -118,14 +118,12 @@ describe('LUME accessibility checks', () => {
       'https://lume.ufrgs.br:8443/record',
       'https://[',
     ]) {
-      const request = vi
-        .fn<typeof fetch>()
-        .mockResolvedValue(
-          new Response(null, {
-            status: 302,
-            headers: { location: destination },
-          }),
-        );
+      const request = vi.fn<typeof fetch>().mockResolvedValue(
+        new Response(null, {
+          status: 302,
+          headers: { location: destination },
+        }),
+      );
       expect(
         await createLumeValidator({ fetch: request }).validate(link),
       ).toEqual(invalidUrl);

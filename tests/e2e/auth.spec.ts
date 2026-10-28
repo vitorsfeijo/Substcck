@@ -33,6 +33,27 @@ async function mockAuth(
     logoutCount: 0,
   };
   if (!api) return state;
+  for (const [endpoint, body] of Object.entries({
+    'tcc-options': {
+      professors: [{ id: professor.id, name: professor.name }],
+      tags: [{ id: 'redes', name: 'Redes', area: null }],
+      areas: [],
+      collections: [],
+    },
+    'me/tccs': { items: [], total: 0, page: 1, pageSize: 20 },
+  })) {
+    await page.route(`${api}/${endpoint}`, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: {
+          'access-control-allow-origin': 'http://127.0.0.1:4173',
+          'access-control-allow-credentials': 'true',
+        },
+        body: JSON.stringify(body),
+      }),
+    );
+  }
   await page.route(`${api}/auth/**`, async (route) => {
     const request = route.request();
     const path = new URL(request.url()).pathname;
@@ -165,15 +186,15 @@ test.describe('acesso com API configurada', () => {
   }) => {
     await mockAuth(page);
     await page.goto('./#/novo-tcc');
-    await expect(page).toHaveURL(/#\/entrar\?next=\/novo-tcc$/);
+    await expect(page).toHaveURL(/#\/entrar\?next=%2Fnovo-tcc$/);
     await page.getByRole('button', { name: /Aluno Autor/ }).click();
     await expect(page).toHaveURL(/#\/novo-tcc$/);
     await expect(
-      page.getByRole('heading', {
-        name: 'Cadastro de TCC disponível no próximo marco.',
-      }),
+      page.getByRole('form', { name: 'Cadastrar Novo TCC' }),
     ).toBeVisible();
-    await expect(page.getByRole('textbox')).toHaveCount(0);
+    await expect(
+      page.getByRole('textbox', { name: /^Título \*/ }),
+    ).toBeVisible();
     await page.getByRole('link', { name: 'Voltar ao perfil' }).click();
     await expect(
       page.getByRole('heading', { name: student.name, exact: true }),
