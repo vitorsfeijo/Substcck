@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. O provedor desses serviços permanece a definir. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 e M1 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md) e [DELIVERY_M1.md](DELIVERY_M1.md). M2: T23-T35 implementadas e validadas localmente; fechamento remoto em acompanhamento em [DELIVERY_M2.md](DELIVERY_M2.md). T36 em diante permanecem pendentes.
+**Estado atual:** M0, M1 e M2 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md) e [DELIVERY_M2.md](DELIVERY_M2.md). T01-T35 implementadas e verificadas localmente e pelo CI/CD; T36 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -278,7 +278,7 @@ M2/M3 permitem uma demonstração incremental do núcleo detalhado no PDF. M4 pe
 - **Conclusão:** autor altera o próprio trabalho sem duplicá-lo; acesso indevido é negado; edição inválida tem comportamento explícito e preserva dados conforme a decisão registrada.
 - **Dependências:** T21, T24, T33 e T34.
 
-**Saída da etapa / M2:** publicação, rascunho e edição com imagens e arquivo implementados e validados localmente. CT01, CT02, obrigatórios, limites, autoria e recuperação de falhas exercitados pela API e pelo navegador. A conclusão do marco aguarda CI/deploy da revisão enviada; veja [DELIVERY_M2.md](DELIVERY_M2.md).
+**Saída da etapa / M2:** concluída. Publicação, rascunho e edição com imagens e arquivo implementados e validados localmente e pelo CI/CD. CT01, CT02, obrigatórios, limites, autoria e recuperação de falhas exercitados pela API e pelo navegador. Frontend publicado e conferido no Pages; evidências e limites de produção em [DELIVERY_M2.md](DELIVERY_M2.md).
 
 ## 9. Etapa 8 - Leitura, download e feed
 

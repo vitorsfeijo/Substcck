@@ -1,6 +1,6 @@
 # Entrega M2 - Publicação, rascunhos, edição e anexos
 
-**Estado:** T23-T35 implementadas e verificadas localmente em 28/10/2026. Fechamento remoto em acompanhamento; a conclusão do marco depende da confirmação de CI/deploy da revisão enviada.
+**Estado:** M2 concluído em 28/10/2026. T23-T35 implementadas e verificadas localmente e pelo GitHub Actions, com frontend publicado e conferido no Pages. As dependências externas de produção estão discriminadas abaixo.
 
 M2 corresponde ao terceiro marco do [plano](IMPLEMENTATION_PLAN.md). O site continua em [Substcck](https://vitorsfeijo.github.io/Substcck/), com frontend estático no GitHub Pages. A API, o banco e os arquivos de produção continuam dependentes de serviços externos próprios.
 
@@ -101,9 +101,15 @@ O CI mantém o artefato de produção separado do bundle de testes de autentica�
 - `dfaa422`: publicação, rascunhos, edição e vínculos transacionais, com testes de API.
 - `6b2690c`: editor, anexos e lista privada de trabalhos na interface.
 - `1df2bf5`: fluxos de navegador e integração ao CI.
+- `6dc0d46`: documentação da entrega e dos resultados locais.
 
 O registro de entrega e o plano são versionados em commit de documentação separado.
 
 ## Evidência remota
 
-Em validação. Registrar a revisão enviada, os commits por responsabilidade, os resultados completos, o CI/deploy e a URL efetivamente conferida antes de declarar M2 concluído.
+- Revisão de implementação/documentação verificada: `6dc0d4634e1d01236bb8c57ae2796f6f029b9fe3`.
+- [CI bem-sucedido](https://github.com/vitorsfeijo/Substcck/actions/runs/40664150959).
+- [Deploy Pages e checagem pós-deploy bem-sucedidos](https://github.com/vitorsfeijo/Substcck/actions/runs/40664151074).
+- [Site publicado](https://vitorsfeijo.github.io/Substcck/), conferido também no navegador: texto da terceira entrega, recarregamento por hash, redirecionamento da ação protegida, ausência de personas locais em produção e apresentação móvel sem overflow ou recursos ausentes.
+
+O fechamento documental é um commit posterior, sem mudança de comportamento da aplicação. A publicação do frontend não comprova o provisionamento dos serviços externos nem a integração institucional real.

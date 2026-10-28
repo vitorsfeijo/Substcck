@@ -83,7 +83,7 @@ Esses casos não devem ser marcados como concluídos por testes apenas da saúde
 
 A existência dessas dependências não retira o comportamento do escopo. O registro de entrega deve indicar quais foram satisfeitas e quais continuam pendentes, sem marcar um requisito de negócio completo por uma simulação ou pela conclusão de M0.
 
-## 7. Evidência a consolidar no fechamento de M2
+## 7. Evidência de M2
 
 | Tarefas     | Requisitos/casos relacionados          | Implementação a verificar                                                                                                                 |
 | ----------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -94,4 +94,4 @@ A existência dessas dependências não retira o comportamento do escopo. O regi
 | T35         | RF#01; UC02; RN02/RN11                 | Edição do próprio trabalho, revalidação e gravação atômica sem substituir publicação válida por uma edição inválida.                      |
 | CI/CD de M2 | GH01-GH08/GH10, no recorte do frontend | Verificações da revisão enviada, bundle de teste separado do artefato público e confirmação do deploy antes de fechar o marco.            |
 
-CT01 e CT02 devem ser exercitados pela API e pela interface com respostas controladas do LUME. A documentação final registrará quais verificações foram executadas e seus resultados, sem tratar a existência de um teste ou arquivo de workflow como prova antecipada de sucesso. A integração de leitura/feed/busca completa na interface permanece em M3.
+CT01 e CT02 foram exercitados pela API e pela interface com respostas controladas do LUME. As 94 execuções aprovadas, o percurso com API/banco/arquivos locais reais e os resultados de CI/deploy estão registrados em [DELIVERY_M2.md](DELIVERY_M2.md), com as limitações dos serviços externos explícitas. A integração de leitura/feed/busca completa na interface permanece em M3.
