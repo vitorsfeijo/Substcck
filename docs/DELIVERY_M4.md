@@ -1,6 +1,6 @@
 # Entrega M4 - Trabalhos conexos e busca por significado
 
-**Estado:** T47-T52 implementadas e verificadas localmente em 30/10/2026. O fechamento remoto está em acompanhamento; a conclusão do marco depende do CI/deploy da revisão enviada.
+**Estado:** M4 concluído em 30/10/2026. T47-T52 implementadas e verificadas localmente e pelo GitHub Actions, com frontend publicado e conferido no Pages. As dependências externas de produção estão discriminadas abaixo.
 
 M4 corresponde ao quinto marco do [plano](IMPLEMENTATION_PLAN.md). As regras estão em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e resolvem D08/D09 de [DECISIONS.md](DECISIONS.md). São decisões do projeto: o PDF anuncia as funcionalidades, mas não define algoritmo, modelo de IA ou pontuação.
 
@@ -96,7 +96,14 @@ Um percurso adicional usou navegador sem interceptação de rotas, Fastify, PGli
 
 ## Evidência remota
 
-Em validação. Registrar a revisão enviada, commits por responsabilidade, resultados e links de CI/deploy, além da URL efetivamente conferida, antes de declarar M4 concluído.
+- Revisão de implementação/documentação verificada: `7b7a6475e33f8f8777d8d5429cc734d066169127`.
+- [CI bem-sucedido](https://github.com/vitorsfeijo/Substcck/actions/runs/41057873025).
+- [Deploy Pages e checagem pós-deploy bem-sucedidos](https://github.com/vitorsfeijo/Substcck/actions/runs/41057873189).
+- [Site publicado](https://vitorsfeijo.github.io/Substcck/), conferido também no navegador: modo por significado e termo preservados ao recarregar, texto da quinta entrega, ausência de resultados simulados sem API, rotas e assets corretos, sem erros ou overflow nas larguras de 360 e 412 pixels.
+
+A validação remota identificou uma corrida no teste de filtros: a asserção podia observar a consulta inicial antes da submissão. A correção sincroniza com a requisição enviada e preserva a verificação de todos os critérios. A execução seguinte do deploy falhou na resolução temporária de duas actions oficiais; suas revisões foram confirmadas nos repositórios de origem, e a repetição da mesma revisão passou integralmente.
+
+O fechamento documental é um commit posterior, sem mudança de comportamento da aplicação. A publicação do frontend não comprova provisionamento externo nem integração institucional real.
 
 ## Commits por responsabilidade
 
@@ -108,5 +115,7 @@ Em validação. Registrar a revisão enviada, commits por responsabilidade, resu
 - `8570494`: navegação entre trabalhos conexos na leitura.
 - `e609403`: modo por significado, contexto e estados da pesquisa.
 - `457fe8e`: avaliação no CI e regressão de navegador.
+- `26838ef`: resultados locais e documentação da entrega.
+- `7b7a647`: sincronização da submissão no teste de filtros identificado pelo CI.
 
 O registro dos resultados locais e o fechamento remoto são commits documentais separados.

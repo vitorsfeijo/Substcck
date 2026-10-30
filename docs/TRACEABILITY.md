@@ -109,7 +109,7 @@ CT01 e CT02 foram exercitados pela API e pela interface com respostas controlada
 
 As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY_M3.md), com 119 execuções de testes aprovadas, percurso integrado com API/SQL/arquivos locais reais e evidências de CI/deploy. Testes locais/controlados não atestam os serviços externos. Busca semântica e conexões permanecem em T47-T52.
 
-## 9. Evidência a consolidar no fechamento de M4
+## 9. Evidência de M4
 
 | Tarefas     | Requisitos/casos relacionados    | Implementação a verificar                                                                                      |
 | ----------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -120,4 +120,4 @@ As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY
 | T52         | Busca semântica; filtros de UC04 | Consulta por significado com filtros obrigatórios e paginação, modo na URL e alternativa textual explícita.    |
 | CI/CD de M4 | GH01-GH08/GH10                   | Regressão anterior, avaliação semântica e interface desktop/celular, com publicação da revisão validada.       |
 
-O desenho está em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e a implementação está descrita em [DELIVERY_M4.md](DELIVERY_M4.md). O fechamento deve registrar os resultados observados de avaliação, testes, percursos integrados e CI/deploy. As respostas controladas de UI não demonstram relevância semântica; os exemplos sintéticos não atestam qualidade sobre qualquer acervo real. A integração externa de produção permanece distinta dessas verificações.
+O desenho está em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e a implementação está descrita em [DELIVERY_M4.md](DELIVERY_M4.md), com 159 execuções de testes aprovadas, 3/3 alvos da avaliação semântica, percurso com API/SQL locais reais e evidências de CI/deploy. As respostas controladas de UI não demonstram relevância semântica; os exemplos sintéticos não atestam qualidade sobre qualquer acervo real. A integração externa de produção permanece distinta dessas verificações.
