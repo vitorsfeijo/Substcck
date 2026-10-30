@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { apiBaseUrl } from '../config';
 import type { TccDTO } from '../models/tcc';
+import { RelatedWorks } from './RelatedWorks';
 import {
   downloadPublishedFile,
   getPublishedWork,
@@ -403,6 +404,12 @@ export function ReadingPage({
               </section>
             </aside>
           </div>
+
+          <RelatedWorks
+            key={work.id}
+            workId={work.id}
+            returnTo={back.slice(1)}
+          />
 
           <div className="reading-end">
             <p>Uma referência pode abrir muitas outras.</p>
