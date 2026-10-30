@@ -8,7 +8,7 @@ import { createTccRepository } from '../repositories/tcc.js';
 import { requireStudent, requireCsrf } from '../auth/access.js';
 import { createPublicationService } from '../services/publication.js';
 
-function parseFilter(query: Record<string, unknown>): TccFilter {
+export function parseFilter(query: Record<string, unknown>): TccFilter {
   const filter: Record<string, unknown> = {};
   const supported = new Set([
     'term',

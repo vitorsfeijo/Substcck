@@ -19,6 +19,8 @@ import type { LumeValidator } from './services/lume.js';
 import { createLumeValidator } from './services/lume.js';
 import { attachmentController } from './controllers/attachments.js';
 import { discoveryController } from './controllers/discovery.js';
+import { relatedController } from './controllers/related.js';
+import { semanticSearchController } from './controllers/semantic-search.js';
 import { requireCsrf, requireStudent } from './auth/access.js';
 
 export async function createApp(
@@ -67,6 +69,8 @@ export async function createApp(
   platformController(app, repository, config);
   if (dependencies.database) {
     discoveryController(app, dependencies.database, config);
+    relatedController(app, dependencies.database);
+    semanticSearchController(app, dependencies.database);
     tccController(
       app,
       dependencies.database,
