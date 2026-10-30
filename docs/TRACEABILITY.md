@@ -121,3 +121,9 @@ As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY
 | CI/CD de M4 | GH01-GH08/GH10                   | Regressão anterior, avaliação semântica e interface desktop/celular, com publicação da revisão validada.       |
 
 O desenho está em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e a implementação está descrita em [DELIVERY_M4.md](DELIVERY_M4.md), com 159 execuções de testes aprovadas, 3/3 alvos da avaliação semântica, percurso com API/SQL locais reais e evidências de CI/deploy. As respostas controladas de UI não demonstram relevância semântica; os exemplos sintéticos não atestam qualidade sobre qualquer acervo real. A integração externa de produção permanece distinta dessas verificações.
+
+## 10. Revisão de M5
+
+T53/T54: regressões de teclado/foco, contraste e recuperação de upload/LUME, em desktop e celular. T55: matriz HTTP de visitante, autor, outro aluno e professor cobrindo detalhe, feed, buscas, conexões, métricas e anexos privados. T56: limites e erros de requisição, medição com 205 trabalhos fictícios e planos SQL. T57/T58: CT01-CT03 e download PDF/DOCX/EPUB com aplicação local integrada, sem interceptação da API no navegador. T59: configuração, demonstração e recuperação em [OPERATIONS.md](OPERATIONS.md).
+
+[DELIVERY_M5.md](DELIVERY_M5.md) registra resultados locais e remotos. O checker pós-deploy confere a API configurada, mas T60 continua aberta até provisionamento e percurso real de visitante/autor, persistência e arquivos em produção. Docker/PostgreSQL local não comprova Neon, R2 ou UFRGS.

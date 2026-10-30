@@ -4,7 +4,7 @@ Proposta de plataforma mobile/web para divulgar, buscar e relacionar TCCs do Ins
 
 **Site:** [vitorsfeijo.github.io/Substcck](https://vitorsfeijo.github.io/Substcck/).
 
-**Status:** M0 a M4 concluídos, com publicação, descoberta, trabalhos conexos e busca por significado. O login institucional e os serviços de produção ainda requerem configuração externa.
+**Status:** M0 a M4 concluídos; revisão local do M5 entregue. A integração completa em produção continua pendente de serviços externos e acesso institucional.
 
 **Stack:** React + TypeScript + Vite; API Node.js/Fastify; PostgreSQL. Frontend no GitHub Pages, com CI/CD pelo GitHub Actions. Backend de produção ainda não provisionado.
 
@@ -18,7 +18,7 @@ npm run db:migrate
 npm run dev
 ```
 
-Abra `http://127.0.0.1:5173/Substcck/`. Para validar: `npx playwright install chromium` e `npm run check`.
+Abra `http://127.0.0.1:5173/Substcck/`. Para publicar localmente, copie `.env.example` para `.env` e use `AUTH_MODE=development` (perfis simulados). Para validar: `npx playwright install chromium` e `npm run check`.
 
 ## Documentação
 
@@ -28,6 +28,7 @@ Abra `http://127.0.0.1:5173/Substcck/`. Para validar: `npx playwright install ch
 - [Entrega M2](docs/DELIVERY_M2.md): publicação, edição, anexos e LUME, com validações e CI/CD confirmados.
 - [Entrega M3](docs/DELIVERY_M3.md): descoberta, leitura, download e filtros, com regressão e CI/CD confirmados.
 - [Entrega M4](docs/DELIVERY_M4.md): conexões e busca por significado, com avaliação e CI/CD confirmados; [regras e limites](docs/SEARCH_DESIGN.md).
+- [Revisão M5](docs/DELIVERY_M5.md): qualidade, regressão integrada e limites da entrega; [operação e demonstração](docs/OPERATIONS.md).
 - [Desafio original](docs/references/Desafio_Engenharia_Software.pdf): documento de referência.
 - [Imagens da especificação](docs/images/spec): figuras e diagramas extraídos do PDF.
 - [Desenvolvimento](docs/DEVELOPMENT.md), [decisões](docs/DECISIONS.md), [rastreabilidade](docs/TRACEABILITY.md) e [publicação](docs/DEPLOYMENT.md).

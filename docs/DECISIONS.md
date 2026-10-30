@@ -198,4 +198,10 @@ Operações de escrita recebem entrada própria de criação/edição, em vez de
 | D14    | Normalizar nomes na implementação preservando figuras originais.        | Não implementar a seta inconsistente repositório → LUME como regra nova. |
 | D15    | Limites iniciais de texto/uploads e configuração explicitados.          | Revisar operação real e metas na etapa de qualidade.                     |
 
+## 8. Revisão operacional M5
+
+A revisão final mantém os limites de upload, consulta e integrações de D15; a medição local isolada e os planos SQL não justificaram novos índices ou metas de produção. Erros de parser, corpo excessivo e tipo indevido preservam os status HTTP 400/413/415, com mensagens seguras. A execução local e o procedimento de recuperação estão em [OPERATIONS.md](OPERATIONS.md).
+
+O pós-deploy compara a configuração pública de API incorporada ao HTML e verifica cinco operações GET quando ela está definida. Acervo vazio é válido; ausência de API e login institucional desativado permanecem estados explícitos, sem concluir a entrega integrada T60. A regressão de CT01-CT03 usa navegador/API/arquivos/banco reais locais e somente a resposta externa LUME controlada no harness, sem configuração que habilite essa simulação em produção.
+
 Os próximos marcos podem revisar decisões com novos dados. Toda alteração que afete comportamento deve atualizar este registro, contratos/testes correspondentes e a rastreabilidade, sem reescrever a descrição histórica do PDF.

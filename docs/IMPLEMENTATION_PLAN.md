@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. Os destinos técnicos estão registrados em `DECISIONS.md`; o provisionamento permanece pendente. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 a M4 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md), [DELIVERY_M3.md](DELIVERY_M3.md) e [DELIVERY_M4.md](DELIVERY_M4.md). T01-T52 implementadas e verificadas localmente e pelo CI/CD; T53 em diante permanecem pendentes. Regras e avaliação semântica em [SEARCH_DESIGN.md](SEARCH_DESIGN.md). A integração institucional e os serviços de produção ainda exigem configuração externa.
+**Estado atual:** M0 a M4 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md), [DELIVERY_M3.md](DELIVERY_M3.md) e [DELIVERY_M4.md](DELIVERY_M4.md). T01-T52 implementadas e verificadas localmente e pelo CI/CD. A revisão local de T53-T59 está registrada em [DELIVERY_M5.md](DELIVERY_M5.md); T60 permanece pendente da integração externa de produção. Regras e avaliação semântica em [SEARCH_DESIGN.md](SEARCH_DESIGN.md). A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -400,48 +400,48 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 
 ### T53 - Revisar mobile/web e navegação por teclado
 
-- [ ] Conferir cadastro, feed, filtros e leitura em tamanhos de celular e desktop; corrigir foco, rótulos, contraste e mensagens associadas aos campos.
+- [x] Conferir cadastro, feed, filtros e leitura em tamanhos de celular e desktop; corrigir foco, rótulos, contraste e mensagens associadas aos campos.
 - **Conclusão:** os fluxos principais são utilizáveis sem perda de informação nos dois contextos; erros não dependem somente da cor vermelha para serem compreendidos.
 - **Dependências:** T35, T41, T46, T49 e T52.
 - **Nota:** os critérios concretos de acessibilidade são decisões de qualidade; o PDF exige experiência acessível, sem especificar uma norma formal.
 
 ### T54 - Revisar estados de carregamento, vazio e falha
 
-- [ ] Conferir consulta sem resultados, feed sem dados, upload interrompido, LUME indisponível, download com falha e recuperação da busca semântica.
+- [x] Conferir consulta sem resultados, feed sem dados, upload interrompido, LUME indisponível, download com falha e recuperação da busca semântica.
 - **Conclusão:** cada falha tem mensagem e próxima ação; dados de formulário são preservados nos caminhos especificados.
 - **Dependências:** T53.
 
 ### T55 - Revisar acesso e publicação de dados
 
-- [ ] Verificar autorização em operações diretas, propriedade dos TCCs/anexos e exclusão de rascunhos de detalhe, feed, busca textual/semântica, conexões e download.
+- [x] Verificar autorização em operações diretas, propriedade dos TCCs/anexos e exclusão de rascunhos de detalhe, feed, busca textual/semântica, conexões e download.
 - **Conclusão:** matriz de acesso de T03 é satisfeita em todos os pontos de entrada, incluindo tentativas por ID conhecido.
 - **Dependências:** T52 e T54.
 
 ### T56 - Revisar consultas e operação básica
 
-- [ ] Medir consultas em uma base de demonstração, ajustar índices/paginação conforme necessário e conferir limites de upload, timeout e recuperação de integrações.
+- [x] Medir consultas em uma base de demonstração, ajustar índices/paginação conforme necessário e conferir limites de upload, timeout e recuperação de integrações.
 - **Conclusão:** comportamento e limitações são documentados; critérios operacionais adotados estão separados das exigências originais, sem metas fictícias atribuídas ao PDF.
 - **Dependências:** T54 e T55.
 
-**Saída da etapa:** experiência revisada e riscos observados tratados, com evidência compatível com o porte do projeto.
+**Saída da etapa:** revisão local T53-T56 concluída, com correções de foco, contraste e erros HTTP, matriz de privacidade e medição de consultas. Evidências e limites em [DELIVERY_M5.md](DELIVERY_M5.md).
 
 ## 13. Etapa 12 - Verificação final e entrega
 
 ### T57 - Consolidar regressão dos casos originais
 
-- [ ] Executar CT01, CT02 e CT03 em ambiente controlado, incluindo recusa do rascunho e nenhum resultado; registrar dados e resultados.
+- [x] Executar CT01, CT02 e CT03 em ambiente controlado, incluindo recusa do rascunho e nenhum resultado; registrar dados e resultados.
 - **Conclusão:** todos os resultados descritos no PDF são reproduzidos pela aplicação integrada, sem dependência de um link público instável para a suíte automatizada.
 - **Dependências:** T56.
 
 ### T58 - Validar os fluxos não cobertos pelos três CTs
 
-- [ ] Conferir obrigatórios ausentes, 5/6 tags, 3/4 imagens, coorientador opcional, três formatos de arquivo, edição/autoria, download com erro, feed, conexões e avaliação semântica.
+- [x] Conferir obrigatórios ausentes, 5/6 tags, 3/4 imagens, coorientador opcional, três formatos de arquivo, edição/autoria, download com erro, feed, conexões e avaliação semântica.
 - **Conclusão:** existem verificações relevantes para os limites e fluxos de risco; cenário somente com URL LUME segue D05.
 - **Dependências:** T57.
 
 ### T59 - Documentar ambientes e recuperação de deploy
 
-- [ ] Documentar configuração, migrações, dados de exemplo, comandos, armazenamento, callbacks/CORS no Pages e provisionamento/deploy do backend; preparar roteiro visitante/autor e procedimento de reversão de código seguido de novo deploy validado.
+- [x] Documentar configuração, migrações, dados de exemplo, comandos, armazenamento, callbacks/CORS no Pages e provisionamento/deploy do backend; preparar roteiro visitante/autor e procedimento de reversão de código seguido de novo deploy validado.
 - **Conclusão:** outra pessoa consegue iniciar um ambiente limpo e demonstrar os marcos; ambientes reais e simulados estão diferenciados e a recuperação do frontend não presume desfazer automaticamente o banco.
 - **Dependências:** T58.
 
@@ -450,8 +450,9 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 - [ ] Atualizar decisões e matriz de tarefas; publicar a versão validada pelo workflow, com backend configurado; verificar a página inicial e os fluxos integrados após o deploy. Incluir uma verificação automática pós-deploy de disponibilidade e carregamento do frontend.
 - **Conclusão:** registrar URL efetiva e execução bem-sucedida; verificar visitante, autor, persistência entre sessões/usuários autorizados, privacidade de rascunhos e anexos, filtros e download. Uma falha pós-deploy aparece no workflow; limitações institucionais reais permanecem explícitas. README aponta ao site publicado somente após confirmação da URL.
 - **Dependências:** T13 e T59. **Requisitos:** GH09-GH11.
+- **Andamento M5:** checagem automática de frontend e API pública configurada preparada, com cinco GETs, CORS e contratos. `VITE_API_URL` permanece ausente no GitHub; provisionamento e validação visitante/autor reais ainda pendentes. Não considerar testes controlados como integração institucional.
 
-**Saída da etapa / M5:** site da aplicação publicado no GitHub Pages, integrado aos serviços externos e verificável via CI/CD. M0 e M1 foram entregues conforme seus registros; M2 a M5 permanecem pendentes neste plano e não são considerados concluídos pela implementação da base.
+**Saída da etapa / M5:** parcialmente entregue. T53-T59 verificadas localmente; T60 ainda exige backend/banco/bucket configurados e percurso integrado de produção. O frontend e o pós-deploy estão preparados, mas a ausência desses serviços não conclui M5. M0-M4 permanecem concluídos; evidências atuais em [DELIVERY_M5.md](DELIVERY_M5.md).
 
 ## 14. Matriz de cobertura do plano
 
