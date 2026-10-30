@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { apiBaseUrl } from '../config';
-import type { DiscoveryOptions, SearchFilters } from '../models/discovery';
-import type { NamedEntity, TccPage } from '../models/tcc';
+import type {
+  DiscoveryOptions,
+  SearchFilters,
+  SearchResults,
+} from '../models/discovery';
+import type { NamedEntity } from '../models/tcc';
 import {
   buildSearchQuery,
   DiscoveryRequestError,
@@ -26,6 +30,8 @@ const emptyOptions: DiscoveryOptions = {
 };
 const emptyMessage =
   'Nenhum trabalho encontrado para os critérios informados. Tente ajustar ou remover alguns filtros.';
+const semanticFallbackMessage =
+  'A busca por significado está indisponível para esta consulta. Exibindo resultados por texto.';
 
 function Selection({
   label,
@@ -64,7 +70,7 @@ function SearchExperience({ query }: { query: string }) {
   const [filters, setFilters] = useState(() => readSearchFilters(query));
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<{
-    data?: { results: TccPage; options: DiscoveryOptions };
+    data?: { results: SearchResults; options: DiscoveryOptions };
     error?: string;
   }>({});
   const options = state.data?.options || emptyOptions;
@@ -102,8 +108,10 @@ function SearchExperience({ query }: { query: string }) {
     };
   }, [query, attempt]);
 
-  const update = (key: keyof SearchFilters, value: string) =>
-    setFilters((current) => ({ ...current, [key]: value }));
+  const update = <K extends keyof SearchFilters>(
+    key: K,
+    value: SearchFilters[K],
+  ) => setFilters((current) => ({ ...current, [key]: value }));
   const toggle = (key: 'tagIds' | 'areaIds', id: string, checked: boolean) =>
     setFilters((current) => ({
       ...current,
@@ -123,7 +131,7 @@ function SearchExperience({ query }: { query: string }) {
     navigate(filters);
   };
   const clear = () => {
-    const next = readSearchFilters('');
+    const next = { ...readSearchFilters(''), mode: filters.mode };
     setFilters(next);
     navigate(next);
   };
@@ -146,6 +154,28 @@ function SearchExperience({ query }: { query: string }) {
       <form className="search-form" aria-label="Buscar TCC" onSubmit={submit}>
         <fieldset className="search-main-fields" disabled={!apiBaseUrl}>
           <legend>O que você quer descobrir?</legend>
+          <label className="search-field search-mode">
+            <span>Modo de busca</span>
+            <select
+              aria-label="Modo de busca"
+              aria-describedby="search-mode-help"
+              value={filters.mode}
+              onChange={(event) =>
+                update(
+                  'mode',
+                  event.target.value === 'semantic' ? 'semantic' : 'text',
+                )
+              }
+            >
+              <option value="text">Por texto</option>
+              <option value="semantic">Por significado</option>
+            </select>
+            <small id="search-mode-help">
+              {filters.mode === 'semantic'
+                ? 'Encontre aproximações entre os temas do acervo.'
+                : 'Procure palavras no título, resumo, autor ou orientador.'}
+            </small>
+          </label>
           <label className="search-field search-term">
             <span>Termo de pesquisa</span>
             <input
@@ -153,7 +183,11 @@ function SearchExperience({ query }: { query: string }) {
               maxLength={200}
               value={filters.term}
               onChange={(event) => update('term', event.target.value)}
-              placeholder="Título, resumo, autor ou orientador"
+              placeholder={
+                filters.mode === 'semantic'
+                  ? 'Descreva o tema que você procura'
+                  : 'Título, resumo, autor ou orientador'
+              }
             />
           </label>
           <div className="search-field-grid">
@@ -341,6 +375,20 @@ function SearchExperience({ query }: { query: string }) {
             </span>
           )}
         </div>
+        {state.data?.results.search?.mode === 'semantic' && (
+          <p className="search-method" role="status">
+            Resultados por significado
+          </p>
+        )}
+        {state.data?.results.search?.requestedMode === 'semantic' &&
+          state.data.results.search.mode === 'text' && (
+            <p className="search-method search-method--fallback" role="status">
+              {typeof state.data.results.search.notice === 'string' &&
+              state.data.results.search.notice.trim()
+                ? state.data.results.search.notice
+                : semanticFallbackMessage}
+            </p>
+          )}
         {!apiBaseUrl ? (
           <div className="discovery-notice">
             <h3>O acervo ainda precisa ser conectado.</h3>

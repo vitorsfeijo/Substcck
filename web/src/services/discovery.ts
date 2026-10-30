@@ -2,8 +2,8 @@ import type {
   DiscoveryOptions,
   FeedDTO,
   SearchFilters,
+  SearchResults,
 } from '../models/discovery';
-import type { TccPage } from '../models/tcc';
 
 export class DiscoveryRequestError extends Error {
   constructor(
@@ -55,6 +55,7 @@ export function readSearchFilters(query: string): SearchFilters {
     ),
   ];
   return {
+    mode: params.get('mode') === 'semantic' ? 'semantic' : 'text',
     term: params.get('term') || '',
     year: params.get('year') || '',
     semester: params.get('semester') || '',
@@ -85,6 +86,7 @@ export function buildSearchQuery(
 ) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(filters)) {
+    if (key === 'mode' && value === 'text') continue;
     const readable = Array.isArray(value) ? value.join(',') : value.trim();
     if (readable) params.set(key, readable);
   }
@@ -111,7 +113,9 @@ export function getSearchResults(
     buildSearchQuery(readSearchFilters(query), readSearchPage(query)),
   );
   params.set('pageSize', String(readSearchPageSize(query)));
-  return get<TccPage>(base, `/tccs?${params.toString()}`, signal);
+  const endpoint =
+    readSearchFilters(query).mode === 'semantic' ? '/search' : '/tccs';
+  return get<SearchResults>(base, `${endpoint}?${params.toString()}`, signal);
 }
 
 /** API attachments keep their origin; a DTO cannot make the catalog load arbitrary URLs. */

@@ -185,11 +185,11 @@ function About() {
       </p>
       <div className="about-grid">
         <section aria-labelledby="delivery-title">
-          <span className="tiny-label">QUARTA ENTREGA</span>
+          <span className="tiny-label">QUINTA ENTREGA</span>
           <h2 id="delivery-title">A base para o que vem.</h2>
           <p>
-            Esta versão permite descobrir, pesquisar e ler trabalhos, baixar
-            artigos anexados e acompanhar os temas mais explorados. Autores
+            Esta versão permite descobrir e ler trabalhos, explorar pesquisas
+            conexas e buscar por texto ou aproximações de significado. Autores
             podem publicar, editar e manter rascunhos privados.
           </p>
           <p>

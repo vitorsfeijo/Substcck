@@ -1,4 +1,4 @@
-import type { NamedEntity, TagDTO, TccDTO } from './tcc';
+import type { NamedEntity, TagDTO, TccDTO, TccPage } from './tcc';
 
 export interface FeedDTO {
   recent: TccDTO[];
@@ -16,6 +16,7 @@ export interface DiscoveryOptions {
 }
 
 export interface SearchFilters {
+  mode: 'text' | 'semantic';
   term: string;
   year: string;
   semester: string;
@@ -26,4 +27,20 @@ export interface SearchFilters {
   tagIds: string[];
   areaIds: string[];
   collectionId: string;
+}
+
+export interface SemanticSearchMetadata {
+  requestedMode: 'semantic';
+  mode: 'semantic' | 'text';
+  fallbackReason:
+    | null
+    | 'insufficient_corpus'
+    | 'query_out_of_vocabulary'
+    | 'index_unavailable'
+    | 'corpus_limit';
+  notice?: string;
+}
+
+export interface SearchResults extends TccPage {
+  search?: SemanticSearchMetadata;
 }
