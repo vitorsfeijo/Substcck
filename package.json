@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail -n web,api \"npm:dev:web\" \"npm:dev:api\"",
-    "check": "npm run lint && npm test && npm run search:evaluate && npm run db:verify && npm run build:api && npm run build && npm run check:pages && npm run test:e2e && npm run test:e2e:auth",
+    "check": "npm run lint && npm test && npm run search:evaluate && npm run db:verify && npm run build:api && npm run build && npm run check:pages && npm run test:e2e && npm run test:e2e:auth && npm run test:e2e:integrated",
     "dev:web": "vite --config config/vite.config.ts --host 127.0.0.1",
     "dev:api": "tsx watch --env-file-if-exists=.env server/index.ts",
     "build": "npm run typecheck && vite build --config config/vite.config.ts",
@@ -28,7 +28,10 @@
     "search:reindex": "tsx --env-file-if-exists=.env server/scripts/reindex-search.ts",
     "search:evaluate": "tsx server/scripts/evaluate-search.ts",
     "check:pages": "node scripts/check-pages.mjs",
-    "check:live": "node scripts/check-live.mjs"
+    "check:live": "node scripts/check-live.mjs",
+    "test:e2e:integrated": "node scripts/test-integrated.mjs",
+    "ops:measure": "tsx server/scripts/measure-queries.ts",
+    "check:api": "node scripts/check-api.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1158.0",

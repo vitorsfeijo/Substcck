@@ -56,6 +56,8 @@ jobs:
         run: npm run test:e2e
       - name: Verify account publication discovery and semantic flows with an isolated fixture bundle
         run: npm run test:e2e:auth
+      - name: Integrated browser regression with real local API database and files
+        run: npm run test:e2e:integrated
       - name: Package only the validated frontend
         if: inputs.upload_pages_artifact && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
