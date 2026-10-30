@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. Os destinos técnicos estão registrados em `DECISIONS.md`; o provisionamento permanece pendente. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 a M3 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md) e [DELIVERY_M3.md](DELIVERY_M3.md). T01-T46 implementadas e verificadas localmente e pelo CI/CD; T47 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
+**Estado atual:** M0 a M3 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md) e [DELIVERY_M3.md](DELIVERY_M3.md). M4 em implementação: regras T47/T50 definidas em [SEARCH_DESIGN.md](SEARCH_DESIGN.md), com avaliação e integração em andamento. T48-T49 e T51 em diante aguardam fechamento. A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -360,7 +360,7 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 
 ### T47 - Definir a regra de trabalhos conexos
 
-- [ ] Escolher sinais, pontuação, limite e desempate para UC06; considerar tags/áreas compartilhadas como uma possibilidade compatível com `buscarPorTags`.
+- [x] Escolher sinais, pontuação, limite e desempate para UC06; considerar tags/áreas compartilhadas como uma possibilidade compatível com `buscarPorTags`.
 - **Conclusão:** exemplos de entrada e saída tornam a regra verificável; o próprio TCC e os rascunhos são excluídos; o algoritmo adotado está identificado como decisão do projeto.
 - **Dependências:** T19 e T46. **Lacuna:** D09.
 
@@ -378,7 +378,7 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 
 ### T50 - Definir o contrato e a avaliação da busca semântica
 
-- [ ] Definir corpus/campos, técnica, dependências, atualização de índice, comportamento com filtros e um conjunto de consultas para avaliação; decidir o uso de serviço externo apenas se necessário.
+- [x] Definir corpus/campos, técnica, dependências, atualização de índice, comportamento com filtros e um conjunto de consultas para avaliação; decidir o uso de serviço externo apenas se necessário.
 - **Conclusão:** existem exemplos de consultas por significado e resultados esperados, limites de custo/operação e comportamento em falha; a definição vai além de renomear a busca por palavra-chave.
 - **Dependências:** T46. **Lacuna:** D08.
 
