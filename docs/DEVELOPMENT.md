@@ -2,7 +2,7 @@
 
 ## Preparação
 
-Requisitos: Node.js 24 e npm. A execução local de M0 a M4 não exige Docker nem credenciais de nuvem.
+Requisitos: Node.js 24 e npm. A execução local, incluindo a revisão M5, não exige Docker nem credenciais de nuvem. O roteiro completo de visitante/autor e recuperação está em [OPERATIONS.md](OPERATIONS.md).
 
 Na raiz do checkout:
 
@@ -43,6 +43,8 @@ Opcionalmente copie `.env.example` para `.env` e ajuste as variáveis. A ausênc
 | `npm run check`                       | Executar a cadeia completa de verificações.                                                                 |
 
 Antes do primeiro teste de navegador, execute `npx playwright install chromium`. Em Linux CI, o workflow instala também as dependências de sistema. Testes de banco usam diretórios temporários próprios, sem dados de usuário.
+
+A regressão adicional `npm run test:e2e:integrated` usa navegador e API/banco/arquivos reais em diretórios novos, portas 3002/4174 e perfis locais explícitos. Somente a resposta externa do LUME é controlada; não altera o banco de desenvolvimento. `npm run ops:measure` emite medições/planos de consultas sobre corpus fictício exclusivamente em memória. `npm run check:api`, com `API_URL` e `FRONTEND_URL`, confere a API pública de produção sem escrita.
 
 ## Estrutura
 
