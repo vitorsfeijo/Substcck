@@ -101,6 +101,30 @@ export async function createApp(
       );
   }
   app.setErrorHandler((error, request, reply) => {
+    // Parser and transport limits are client errors, even with a custom handler.
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === 'FST_ERR_CTP_BODY_TOO_LARGE')
+        return reply.code(413).send({
+          code: 'REQUEST_TOO_LARGE',
+          message: 'A requisição excede o tamanho permitido.',
+        });
+      if (error.code === 'FST_ERR_CTP_INVALID_MEDIA_TYPE')
+        return reply.code(415).send({
+          code: 'UNSUPPORTED_CONTENT_TYPE',
+          message: 'O formato da requisição não é suportado.',
+        });
+      if (
+        [
+          'FST_ERR_CTP_INVALID_JSON_BODY',
+          'FST_ERR_CTP_EMPTY_JSON_BODY',
+          'FST_ERR_CTP_INVALID_CONTENT_LENGTH',
+        ].includes(String(error.code))
+      )
+        return reply.code(400).send({
+          code: 'INVALID_REQUEST',
+          message: 'Requisição inválida.',
+        });
+    }
     if (error instanceof LumePublicationError)
       return reply.code(422).send({
         code: 'LUME_INVALID',
