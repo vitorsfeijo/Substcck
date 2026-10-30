@@ -268,6 +268,7 @@ test.describe('descoberta pública com API configurada', () => {
       .getByLabel('Redes', { exact: true })
       .check();
     await page.getByRole('button', { name: 'Pesquisar', exact: true }).click();
+    await expect.poll(() => state.queries.at(-1)?.get('year')).toBe('2025');
     await expect(
       page.getByRole('link', { name: 'Pesquisa A — Redes', exact: true }),
     ).toBeVisible();
@@ -330,9 +331,14 @@ test.describe('descoberta pública com API configurada', () => {
       .getByLabel('Computação', { exact: true })
       .check();
     await page.getByRole('button', { name: 'Pesquisar', exact: true }).click();
+    await expect.poll(() => state.queries.at(-1)?.get('term')).toBe('Joao');
     await expect(
       page.getByRole('link', { name: 'Pesquisa A — Redes', exact: true }),
     ).toBeVisible();
+    for (const id of ['B', 'C', 'D'])
+      await expect(
+        page.getByRole('link', { name: new RegExp(`Pesquisa ${id}`) }),
+      ).toHaveCount(0);
     const query = state.queries.at(-1)!;
     for (const [key, value] of Object.entries({
       term: 'Joao',
