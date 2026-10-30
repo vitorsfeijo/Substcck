@@ -10,6 +10,7 @@ const env = {
   SUBTCCSTACK_BUILD_TARGET: 'integration-test',
   SUBTCCSTACK_TEST_DIRECTORY: mkdtempSync(resolve('.cache/qa/integration-')),
   VITE_API_URL: 'http://127.0.0.1:3002/api',
+  VITE_BASE_PATH: '/Substcck/',
 };
 for (const args of [
   [
