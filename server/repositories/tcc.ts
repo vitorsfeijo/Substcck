@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { Database, SqlConnection } from '../data/database.js';
+import { updateSemanticDocument } from '../semantic/documents.js';
 import {
   TccAccessError,
   TccValidationError,
@@ -338,6 +339,7 @@ export function createTccRepository(db: Database) {
               data.file.path,
             ],
           );
+        await updateSemanticDocument(tx, id);
         const result = await find(tx, id, authorId);
         if (!result)
           throw new Error('Não foi possível recuperar o trabalho salvo.');

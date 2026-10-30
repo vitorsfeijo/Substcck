@@ -4,6 +4,7 @@ import { createApp } from './app.js';
 import { createPlatformRepository } from './repositories/platform.js';
 import { createOidcAdapter } from './auth/oidc.js';
 import { createAttachmentStore } from './attachment-store.js';
+import { ensureSemanticDocuments } from './semantic/documents.js';
 
 const config = readConfig();
 const db = await openDatabase(config);
@@ -15,6 +16,13 @@ const app = await createApp(config, createPlatformRepository(db), {
   identityAdapter,
   attachmentStore: createAttachmentStore(config),
 });
+try {
+  await ensureSemanticDocuments(db);
+} catch {
+  app.log.warn(
+    'Não foi possível preparar o índice de significado. A busca textual continua disponível.',
+  );
+}
 app.addHook('onClose', () => db.close());
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.once(signal, () => {
