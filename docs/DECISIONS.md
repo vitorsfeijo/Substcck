@@ -169,7 +169,14 @@ Os nomes são normalizados em TypeScript; não reproduzir tipos singulares inade
 
 Operações de escrita recebem entrada própria de criação/edição, em vez de confiar em `autorId`, status ou contadores enviados no DTO de leitura. Erros de validação identificam o campo e preservam a mensagem de negócio adequada; um erro de integração não retorna conexão de banco, segredo ou pilha interna ao visitante.
 
-Busca semântica e trabalhos conexos continuam requerendo conjunto de avaliação, limites e critérios de ordenação próprios em T47-T52. A presença de um filtro por tags não será apresentada como busca semântica. M0 apenas reserva a separação necessária entre consulta, indexação e provedores futuros.
+### Busca por significado e conexões de M4 - D08 e D09
+
+[SEARCH_DESIGN.md](SEARCH_DESIGN.md) registra os algoritmos, corpus, limites, avaliação e recuperação de T47-T52. Essas escolhas são do projeto; o PDF não fornece pontuação, modelo ou provedor de IA.
+
+- **D08:** análise semântica latente local (TF-IDF e decomposição truncada), aprendida por coocorrências do corpus público. A consulta é projetada no mesmo espaço dos documentos; não é sinônimo de busca literal nem de filtro por tag. Texto permanece o modo padrão e a alternativa explícita quando significado estiver indisponível, sempre com os mesmos filtros estruturados. O corpus versionado de avaliação inclui alvos relevantes sem tokens diretos da consulta.
+- **D09:** trabalhos publicados que compartilham tags ou áreas distintas são ordenados por `4 × tags em comum + áreas distintas em comum`, seguidos de defesa, publicação e ID. A origem e rascunhos são excluídos, com até quatro resultados; não há relação inferida por mesmo autor ou popularidade.
+- A indexação dos termos ponderados e seu hash usa a mesma transação da publicação/edição. O cache do modelo depende da revisão do corpus público; reconstrução e inicialização preparam registros antigos, sem expor índice privado ou usar silenciosamente uma revisão antiga.
+- O mecanismo local não envia consultas ou corpus a terceiros e não exige credenciais de IA. Não é um modelo de linguagem previamente treinado; qualidade e vocabulário dependem do acervo. Os limites iniciais e os critérios de avaliação estão no desenho, sem presumir compreensão geral de linguagem.
 
 ## 7. Situação das lacunas de SPEC.md
 
@@ -182,8 +189,8 @@ Busca semântica e trabalhos conexos continuam requerendo conjunto de avaliaçã
 | D05    | Download de anexo ou link claramente identificado ao LUME.              | Implementar leitura/download.                                            |
 | D06    | Revalidação e edição atômica preservam versão pública anterior em erro. | Implementar edição/autoria e atualização do índice.                      |
 | D07    | Data de defesa, timestamps e eventos/ranking de 30 dias definidos.      | Implementar feed, eventos e consultas de popularidade.                   |
-| D08    | Técnica e avaliação semântica adiadas explicitamente para T50-T52.      | Definir e implementar o algoritmo com avaliação.                         |
-| D09    | Relações terão contrato e avaliação próprios em T47-T49.                | Escolher e implementar a pontuação/ordenação.                            |
+| D08    | LSA local, corpus, avaliação e alternativa textual em SEARCH_DESIGN.md. | Verificar a implementação e a relevância no acervo real.                 |
+| D09    | Pontuação por tags/áreas, limite e desempates em SEARCH_DESIGN.md.      | Verificar consulta, privacidade e navegação das conexões.                |
 | D10    | Áreas/coleções, período e semântica de filtros definidos.               | Criar entidades e consultas.                                             |
 | D11    | DTOs completos, entradas separadas e listas explícitas.                 | Implementar contratos dos fluxos de negócio.                             |
 | D12    | Manter a associação original de RF#02 a busca e feed.                   | Não renumerar o PDF para corrigir essa assimetria.                       |

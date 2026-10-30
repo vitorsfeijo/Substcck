@@ -34,7 +34,17 @@ Um comando de reconstrução recalcula a representação a partir dos publicados
 
 ### Avaliação antes de concluir a entrega
 
-O conjunto versionado de avaliação deve incluir consultas portuguesas com temas distintos, documentos de ponte por coocorrência e pelo menos um resultado relevante sem tokens diretos em comum com a consulta. A comparação deve demonstrar que a busca textual não encontra esse resultado. Também deve verificar consulta irrelevante, caixa/acentos, estabilidade, filtros combinados, paginação, exclusão de rascunhos e atualização após edição.
+O conjunto versionado em `server/semantic/evaluation.ts` contém nove documentos fictícios em três grupos. `npm run search:evaluate` verifica cada consulta abaixo: alvo entre os três primeiros, os três resultados no grupo correto e nenhum token direto da consulta na representação do alvo.
+
+| Consulta               | Alvo relevante          | Ponte aprendida no corpus                           |
+| ---------------------- | ----------------------- | --------------------------------------------------- |
+| `proteção privacidade` | Criptografia hospitalar | Sigilo, prontuários, anonimização e dados clínicos. |
+| `automóveis`           | Roteamento veicular     | Mobilidade, rotas, tráfego e redes veiculares.      |
+| `colheita`             | Irrigação agrícola      | Agricultura, solo, água e sensores.                 |
+
+A regressão de API deve demonstrar que a busca textual não encontra o alvo sem tokens diretos. Também deve verificar consulta irrelevante, caixa/acentos, estabilidade, filtros combinados, paginação, exclusão de rascunhos e atualização após edição. O limiar inicial é cosseno de 0,3. O número de dimensões é reduzido para ser estritamente menor que o rank observado, mantendo ao menos duas dimensões. Rank inferior a três fica indisponível, pois uma única dimensão colapsaria a distinção entre temas.
+
+Antes de normalizar os vetores latentes, exige-se proporção mínima de energia projetada de `1e-6`. Documentos sem sinal suficiente não são classificados; consultas sem representação suficiente usam a alternativa textual. O corte evita transformar resíduo numérico em similaridade alta ao editar um trabalho para um tema fora do subespaço. Essa edição é coberta por regressões do núcleo e da API.
 
 Limiares e dimensões serão conferidos com os resultados efetivos desse conjunto. O registro de entrega deve informar os casos aprovados e os limites observados; exemplos sintéticos não substituem avaliação de relevância por usuários sobre um acervo real.
 

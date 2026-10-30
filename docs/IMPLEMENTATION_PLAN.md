@@ -10,7 +10,7 @@ O PDF aprofunda RF#01 e RF#02; recursos apenas anunciados também aparecem neste
 
 **Direção adicional definida pelo usuário:** entregar o site responsivo no **GitHub Pages**, com **GitHub Actions** para CI/CD, conforme a seção 16 de `SPEC.md`. O frontend terá build estático; backend, autenticação, banco e arquivos compartilhados funcionarão em serviços externos. Os destinos técnicos estão registrados em `DECISIONS.md`; o provisionamento permanece pendente. O Pages e o Actions não substituem um backend em execução.
 
-**Estado atual:** M0 a M3 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md) e [DELIVERY_M3.md](DELIVERY_M3.md). M4 em implementação: regras T47/T50 definidas em [SEARCH_DESIGN.md](SEARCH_DESIGN.md), com avaliação e integração em andamento. T48-T49 e T51 em diante aguardam fechamento. A integração institucional e os serviços de produção ainda exigem configuração externa.
+**Estado atual:** M0 a M3 concluídos, com evidências em [DELIVERY_M0.md](DELIVERY_M0.md), [DELIVERY_M1.md](DELIVERY_M1.md), [DELIVERY_M2.md](DELIVERY_M2.md) e [DELIVERY_M3.md](DELIVERY_M3.md). M4: T47-T52 implementadas e validadas localmente, com regras em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e fechamento remoto em acompanhamento em [DELIVERY_M4.md](DELIVERY_M4.md). T53 em diante permanecem pendentes. A integração institucional e os serviços de produção ainda exigem configuração externa.
 
 **M1 entregue:** autenticação, perfis e domínio persistente de T14-T22 estão descritos em [DELIVERY_M1.md](DELIVERY_M1.md), com verificações e CI/CD bem-sucedidos. A conexão institucional real continua dependente de configuração autorizada.
 
@@ -366,13 +366,13 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 
 ### T48 - Implementar a consulta de conexões
 
-- [ ] Implementar `mapearTrabalhosConexos` e a operação de leitura correspondente.
+- [x] Implementar `mapearTrabalhosConexos` e a operação de leitura correspondente.
 - **Conclusão:** conjunto de trabalhos conhecido gera as conexões e a ordem de T47; ausência de conexão é tratada sem erro.
 - **Dependências:** T47.
 
 ### T49 - Exibir conexões nos detalhes
 
-- [ ] Inserir trabalhos relacionados na leitura, permitindo navegar entre eles conforme a extensão UC06 de UC05.
+- [x] Inserir trabalhos relacionados na leitura, permitindo navegar entre eles conforme a extensão UC06 de UC05.
 - **Conclusão:** usuário alcança outro TCC relacionado e continua a exploração; seção vazia não sugere relações inexistentes.
 - **Dependências:** T37 e T48.
 
@@ -384,17 +384,17 @@ Estas funcionalidades constam no escopo geral do PDF, mas seus algoritmos não e
 
 ### T51 - Implementar a indexação semântica
 
-- [ ] Criar e atualizar a representação escolhida ao publicar/editar, com reconstrução do índice e remoção de conteúdo que deixe de ser público.
+- [x] Criar e atualizar a representação escolhida ao publicar/editar, com reconstrução do índice e remoção de conteúdo que deixe de ser público.
 - **Conclusão:** rascunhos não entram no corpus público; mudanças são refletidas; falhas de indexação têm recuperação definida.
 - **Dependências:** T25, T35 e T50.
 
 ### T52 - Integrar consulta semântica com os filtros
 
-- [ ] Executar o mecanismo escolhido e apresentar resultados mantendo todas as restrições estruturadas; aplicar o comportamento de fallback definido em T50.
+- [x] Executar o mecanismo escolhido e apresentar resultados mantendo todas as restrições estruturadas; aplicar o comportamento de fallback definido em T50.
 - **Conclusão:** avaliação de T50 é executada, filtros continuam obrigatórios e indisponibilidade não expõe rascunhos nem impede recuperação da pesquisa.
 - **Dependências:** T44, T45 e T51.
 
-**Saída da etapa / M4:** UC06 e busca semântica implementados com decisões e evidências próprias, sem atribuir ao PDF critérios que ele não forneceu.
+**Saída da etapa / M4:** UC06 e busca semântica implementados e validados localmente, com decisões e avaliação próprias em [SEARCH_DESIGN.md](SEARCH_DESIGN.md). Conexões, filtros, privacidade, atualização/recuperação do índice e três alvos sem tokens diretos verificados. CI/deploy da revisão enviada em acompanhamento em [DELIVERY_M4.md](DELIVERY_M4.md); critérios não definidos no PDF permanecem identificados como decisões do projeto.
 
 ## 12. Etapa 11 - Revisar experiência e qualidade
 

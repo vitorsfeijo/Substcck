@@ -108,3 +108,16 @@ CT01 e CT02 foram exercitados pela API e pela interface com respostas controlada
 | CI/CD de M3 | GH01-GH08/GH10, no recorte do frontend | Regressão dos marcos anteriores, bundle de teste separado e confirmação de publicação da revisão validada.                                                |
 
 As implementações e os contratos estão descritos em [DELIVERY_M3.md](DELIVERY_M3.md), com 119 execuções de testes aprovadas, percurso integrado com API/SQL/arquivos locais reais e evidências de CI/deploy. Testes locais/controlados não atestam os serviços externos. Busca semântica e conexões permanecem em T47-T52.
+
+## 9. Evidência a consolidar no fechamento de M4
+
+| Tarefas     | Requisitos/casos relacionados    | Implementação a verificar                                                                                      |
+| ----------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| T47-T48     | UC06; classificação; D09         | Pontuação de tags/áreas, limite e desempates definidos; consulta só de publicados, sem origem/rascunhos.       |
+| T49         | UC05 com extensão UC06           | Conexões na leitura, justificativa por temas compartilhados, navegação e estados vazio/erro recuperável.       |
+| T50         | Busca semântica; D08             | LSA local, corpus/campos, limites, alternativa textual e avaliação versionada sem atribuir o algoritmo ao PDF. |
+| T51         | RN10/RN14; publicação/edição     | Termos e hash atualizados atomicamente, remoção de privados, cache por fingerprint e reconstrução recuperável. |
+| T52         | Busca semântica; filtros de UC04 | Consulta por significado com filtros obrigatórios e paginação, modo na URL e alternativa textual explícita.    |
+| CI/CD de M4 | GH01-GH08/GH10                   | Regressão anterior, avaliação semântica e interface desktop/celular, com publicação da revisão validada.       |
+
+O desenho está em [SEARCH_DESIGN.md](SEARCH_DESIGN.md) e a implementação está descrita em [DELIVERY_M4.md](DELIVERY_M4.md). O fechamento deve registrar os resultados observados de avaliação, testes, percursos integrados e CI/deploy. As respostas controladas de UI não demonstram relevância semântica; os exemplos sintéticos não atestam qualidade sobre qualquer acervo real. A integração externa de produção permanece distinta dessas verificações.

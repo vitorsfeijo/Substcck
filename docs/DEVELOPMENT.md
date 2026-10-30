@@ -2,7 +2,7 @@
 
 ## Preparação
 
-Requisitos: Node.js 24 e npm. A execução local de M0 a M3 não exige Docker nem credenciais de nuvem.
+Requisitos: Node.js 24 e npm. A execução local de M0 a M4 não exige Docker nem credenciais de nuvem.
 
 Na raiz do checkout:
 
@@ -23,22 +23,24 @@ Opcionalmente copie `.env.example` para `.env` e ajuste as variáveis. A ausênc
 
 ## Comandos
 
-| Comando                               | Finalidade                                                                                  |
-| ------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                        |
-| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                            |
-| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção.        |
-| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.              |
-| `npm run files:prune`                 | Remover uploads registrados sem referências e com mais de 24 horas; execução manual.        |
-| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                        |
-| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                        |
-| `npm test`                            | Testes de API, configuração, persistência e migrações.                                      |
-| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.           |
-| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                          |
-| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                         |
-| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                               |
-| `npm run test:e2e:auth`               | Gerar bundle isolado e validar conta, editor e descoberta com respostas de API controladas. |
-| `npm run check`                       | Executar a cadeia completa de verificações.                                                 |
+| Comando                               | Finalidade                                                                                                  |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `npm run dev:web` / `npm run dev:api` | Iniciar cada processo separadamente.                                                                        |
+| `npm run db:migrate`                  | Aplicar migrações SQL pendentes.                                                                            |
+| `npm run db:verify`                   | Gravar uma prova, fechar a conexão, reabrir, ler e remover a prova; recusa produção.                        |
+| `npm run db:seed`                     | Preparar dados fictícios A-E no banco local; recusa produção e `DATABASE_URL`.                              |
+| `npm run files:prune`                 | Remover uploads registrados sem referências e com mais de 24 horas; execução manual.                        |
+| `npm run search:reindex`              | Reconstruir termos e hashes do índice público a partir dos TCCs publicados.                                 |
+| `npm run search:evaluate`             | Executar o corpus versionado de avaliação da busca por significado, sem acesso à rede.                      |
+| `npm run lint` / `npm run format`     | Conferir ou aplicar ESLint/Prettier.                                                                        |
+| `npm run typecheck`                   | Verificar frontend, backend, configurações e testes.                                                        |
+| `npm test`                            | Testes de API, configuração, persistência e migrações.                                                      |
+| `npm run build` / `npm run build:api` | Gerar `.cache/build/web/` estático e `.cache/build/api/` da API, respectivamente.                           |
+| `npm run preview`                     | Servir somente o frontend compilado na porta 4173.                                                          |
+| `npm run check:pages`                 | Conferir prefixo e conteúdo publicável do artefato.                                                         |
+| `npm run test:e2e`                    | Testar o build em Chromium desktop e celular.                                                               |
+| `npm run test:e2e:auth`               | Gerar bundle isolado e validar conta, editor, descoberta, significado e conexões com respostas controladas. |
+| `npm run check`                       | Executar a cadeia completa de verificações.                                                                 |
 
 Antes do primeiro teste de navegador, execute `npx playwright install chromium`. Em Linux CI, o workflow instala também as dependências de sistema. Testes de banco usam diretórios temporários próprios, sem dados de usuário.
 
@@ -64,7 +66,7 @@ Os comandos npm continuam sendo executados na raiz e as URLs locais e públicas 
 
 ## Banco e migrações
 
-Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso, `003_tcc_domain.sql` cria o domínio de TCC e classificação, `004_attachments.sql` registra os anexos, `005_publication_requests.sql` registra as requisições de criação idempotentes e `006_discovery_views.sql` cria eventos temporais de exploração, snapshot das tags e deduplicação de leitura.
+Sem `DATABASE_URL`, desenvolvimento usa PGlite em `./.cache/data/dev`, ignorado pelo Git. As migrações ficam em `server/db/migrations/`: `001_platform.sql` cria os metadados de plataforma, `002_identity.sql` cria usuários/sessões/tentativas de acesso, `003_tcc_domain.sql` cria o domínio de TCC e classificação, `004_attachments.sql` registra os anexos, `005_publication_requests.sql` registra as requisições de criação idempotentes, `006_discovery_views.sql` cria eventos temporais de exploração e `007_semantic_documents.sql` persiste termos ponderados, hash, versão e referência temporal do índice público de significado.
 
 Migrações são ordenadas por nome e registradas com checksum, em transações. Reexecutar não duplica operações; alterar uma migração já aplicada falha explicitamente. Crie outro arquivo SQL para evoluir o esquema. A tabela de migrações é bloqueada durante aplicação para serializar executores; no provisionamento inicial, execute um único processo de migração.
 
@@ -199,7 +201,7 @@ SQL e armazenamento de objetos não compartilham uma transação distribuída. O
 
 Com a API local parada, `npm run files:prune` remove registros/objetos de uploads sem referências e com mais de 24 horas. No contêiner de produção, o comando equivalente é `node build/server/scripts/prune-attachments.js`, com as mesmas variáveis de banco e armazenamento da API. A operação reconfirma idade e ausência de vínculo sob bloqueio de linha antes de remover, e não cria cron ou automação. Ela percorre metadados elegíveis e não inventaria arquivos/objetos que eventualmente ficaram sem registro após uma interrupção do processo. Anexos vinculados são preservados.
 
-O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas para conta, editor e descoberta (`auth.spec.ts`, `editor.spec.ts` e `discovery.spec.ts`). Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. As provas de conexão real UFRGS e provisionamento de backend/banco/bucket continuam pendentes, independentemente do resultado desses testes.
+O comando `test:e2e:auth` usa um bundle separado em `.cache/build/auth-web` e respostas de API controladas para conta, editor, descoberta e M4 (`auth.spec.ts`, `editor.spec.ts`, `discovery.spec.ts` e `semantic.spec.ts`). Esse bundle não substitui o artefato de produção em `.cache/build/web` e não é publicado no Pages. As provas de conexão real UFRGS e provisionamento de backend/banco/bucket continuam pendentes, independentemente do resultado desses testes.
 
 ## Descoberta, leitura e busca de M3
 
@@ -241,6 +243,40 @@ Repetições da mesma sessão/TCC dentro de 30 minutos não contam novamente. De
 Se o navegador bloquear cookies entre Pages e API em sites distintos, não é possível garantir essa deduplicação entre requisições. Não se substitui o cookie por fingerprint ou identidade do usuário. Validar a política do navegador na implantação ou usar domínios que permitam a sessão conforme a arquitetura escolhida. Os tópicos refletem eventos sob essa política, não uma contagem de pessoas únicas.
 
 O bundle isolado de `test:e2e:auth` cobre conta, editor e descoberta com respostas de API controladas, sem ser publicado no Pages. Os testes de repositório/API executam SQL real em PGlite com dados fictícios. Testes controlados de LUME ou armazenamento não comprovam seus provedores externos; a entrega deve registrar separadamente qualquer percurso integrado com API, banco e arquivos locais reais, sem interceptação HTTP.
+
+## Trabalhos conexos e busca por significado de M4
+
+As regras e a avaliação estão em [SEARCH_DESIGN.md](SEARCH_DESIGN.md). A leitura consulta `GET /api/tccs/:id/related`, com resposta `{ items: [{ tcc, sharedTags, sharedAreas, score }] }`. Somente publicados participam, a origem é excluída e um candidato precisa compartilhar ao menos uma tag ou área distinta. A pontuação é `4 × tags em comum + áreas distintas em comum`; até quatro resultados seguem pontuação, defesa e publicação decrescentes e ID como desempate. A interface mostra os temas em comum e permite abrir outra pesquisa. Lista vazia ou falha recuperável de conexões não impede a leitura nem o download.
+
+### Modos de pesquisa e filtros
+
+`Por texto` permanece padrão, usando `GET /api/tccs`. O seletor **Modo de busca** permite `Por significado`, serializado como `mode=semantic` na query de `#/buscar` e enviado a `GET /api/search?mode=semantic&term=...`. As demais dimensões, paginação, retorno da leitura e recarregamento conservam a consulta. Limpar filtros mantém o modo selecionado.
+
+A operação semântica aceita os mesmos filtros e devolve `items`, `total`, `page`, `pageSize` e `search: { requestedMode, mode, fallbackReason, notice? }`. Ano, semestre, intervalo de defesa, autor, orientador, tags, áreas e coleção continuam restrições obrigatórias, aplicadas antes da paginação. O termo é projetado por significado, sem exigir presença literal no alvo. Resultados semânticos são ordenados por cosseno, depois defesa, publicação e ID; o limiar é 0,3.
+
+Quando o índice/modelo está indisponível, o corpus é insuficiente, a consulta não possui vocabulário reconhecido ou o limite operacional é excedido, a API usa a busca textual com o termo e filtros originais, se ela estiver disponível. O modo efetivo é `text` e o aviso é explícito:
+
+> A busca por significado está indisponível para esta consulta. Exibindo resultados por texto.
+
+O aviso também aparece quando a alternativa textual não encontra resultados. Falha geral da API continua sendo tratada como erro com nova tentativa, sem perder os valores do formulário.
+
+### Corpus, limites e avaliação
+
+O mecanismo local usa TF-IDF e análise semântica latente por decomposição truncada. Título, resumo, tags, áreas e coleção formam a representação de publicados, com pesos 3, 1, 2, 1 e 1, respectivamente. Nomes de autores/orientadores não entram nesse vetor; continuam pesquisáveis no modo textual e nos filtros próprios. Não há dicionário de sinônimos manual, serviço externo, download de modelo, credencial de IA ou envio das consultas a terceiros.
+
+O treinamento considera até 512 documentos e 10.000 termos, com até oito dimensões, 64 iterações por componente e orçamento de dois segundos verificado durante o cálculo. São necessários ao menos três documentos e duas dimensões efetivas, com rank observado de pelo menos três e redução estrita desse rank. A projeção precisa reter ao menos `1e-6` da energia original antes de normalizar: documentos sem sinal suficiente não são classificados e consultas sem representação suficiente usam a alternativa textual. Corpus degenerado ou representação inválida também leva à alternativa textual. Esses limites afetam o mecanismo semântico, não a quantidade de TCCs que a aplicação pode cadastrar. Não se trata de um modelo de linguagem previamente treinado: a qualidade depende das coocorrências, diversidade e vocabulário existentes no acervo.
+
+`npm run search:evaluate` executa o corpus fictício versionado em `server/semantic/evaluation.ts`, com nove documentos em três grupos. Verifica `proteção privacidade` → Criptografia hospitalar, `automóveis` → Roteamento veicular e `colheita` → Irrigação agrícola. Cada alvo deve estar entre os três primeiros, esses três resultados devem pertencer ao grupo correto e o alvo não pode compartilhar tokens diretos com a consulta. A saída inclui resultados e tempo observado; o comando falha se um caso não atender aos critérios. O corpus é de avaliação e não é importado como acervo de produção. O conjunto sintético não substitui avaliação de relevância com usuários e documentos reais.
+
+### Persistência e reconstrução
+
+`007_semantic_documents.sql` cria a representação SQL pública. Publicação/edição e atualização dos termos/hash usam a mesma transação, incluindo os vínculos de classificação; uma falha conserva a publicação anterior e não grava um índice parcial. Rascunhos são retirados dessa representação e a exclusão de um TCC elimina sua referência. O serviço confere versão, estado público e referência temporal; o modelo em memória é reutilizado apenas se o fingerprint do corpus continuar igual. Não há reutilização silenciosa de um modelo antigo após mudança do corpus.
+
+A inicialização prepara os registros faltantes ou desatualizados. Se essa preparação falhar, registra aviso e mantém a busca textual disponível; a busca por significado identifica a inconsistência e usa a alternativa explícita. Alterações SQL manuais fora dos serviços precisam de reconstrução.
+
+Com a API local parada, execute `npm run search:reindex` para aplicar migrações e reconstruir termos/hashes de todos os publicados. O comando usa uma transação e bloqueio coordenado com publicação/edição, sem chamadas externas durante o bloqueio; um erro desfaz a reconstrução. O lote inicial aceita até 10.000 registros. No contêiner, use `node build/server/scripts/reindex-search.js`, com as mesmas variáveis de banco da API. Não abra dois processos no mesmo diretório PGlite; pare a API antes do comando local. A reconstrução da representação não remove os limites de treinamento descritos acima.
+
+Sem `VITE_API_URL` de produção, os controles de consulta permanecem indisponíveis e a interface não simula resultados semânticos. O backend, banco, arquivos e acesso institucional ainda exigem o provisionamento já documentado; os testes locais ou com respostas controladas não comprovam essas conexões externas.
 
 ## Backend externo preparado, sem provisionamento
 
