@@ -126,6 +126,23 @@ export function TccEditor({ workId }: { workId?: string }) {
   const feedback = useRef<HTMLDivElement>(null);
   const imageInput = useRef<HTMLInputElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  const lumeInput = useRef<HTMLInputElement>(null);
+  const imageButton = useRef<HTMLButtonElement>(null);
+  const fileButton = useRef<HTMLButtonElement>(null);
+  const [focusRequest, setFocusRequest] = useState<{
+    target: 'feedback' | 'lume' | 'images' | 'file';
+  } | null>(null);
+
+  useEffect(() => {
+    if (!focusRequest) return;
+    const targets = {
+      feedback: feedback.current,
+      lume: lumeInput.current,
+      images: imageButton.current,
+      file: fileButton.current,
+    };
+    targets[focusRequest.target]?.focus({ preventScroll: false });
+  }, [focusRequest]);
 
   useEffect(() => {
     active.current = true;
@@ -215,6 +232,7 @@ export function TccEditor({ workId }: { workId?: string }) {
 
   const update = (key: keyof EditorForm, value: string) => {
     setForm((current) => ({ ...current, [key]: value }));
+    setFields((current) => ({ ...current, [key]: '' }));
     setSuccess('');
     setLumeFailure(null);
   };
@@ -224,10 +242,7 @@ export function TccEditor({ workId }: { workId?: string }) {
     setFields({});
     setLumeFailure(null);
   };
-  const focusFeedback = () =>
-    requestAnimationFrame(() =>
-      feedback.current?.focus({ preventScroll: false }),
-    );
+  const focusFeedback = () => setFocusRequest({ target: 'feedback' });
   const csrf = auth.csrfToken;
 
   const save = async (intent: 'publish' | 'draft') => {
@@ -320,6 +335,8 @@ export function TccEditor({ workId }: { workId?: string }) {
         ...current,
         mediaIds: 'Você pode anexar até 3 imagens.',
       }));
+      setMessage('Confira o limite de imagens antes de tentar novamente.');
+      focusFeedback();
       return;
     }
     const max = kind === 'image' ? 5 * 1024 * 1024 : 25 * 1024 * 1024;
@@ -331,6 +348,8 @@ export function TccEditor({ workId }: { workId?: string }) {
             ? 'Cada imagem deve ter até 5 MiB.'
             : 'O arquivo deve ter até 25 MiB.',
       }));
+      setMessage('Confira o tamanho do anexo antes de tentar novamente.');
+      focusFeedback();
       return;
     }
     locked.current = true;
@@ -384,6 +403,7 @@ export function TccEditor({ workId }: { workId?: string }) {
       );
       if (error instanceof EditorRequestError && error.status === 401)
         void auth.refresh();
+      focusFeedback();
     } finally {
       operations.current.delete(operation);
       locked.current = false;
@@ -401,6 +421,7 @@ export function TccEditor({ workId }: { workId?: string }) {
     }
     if (image.staged && apiBaseUrl && csrf)
       void discardAttachment(apiBaseUrl, csrf, image.id).catch(() => {});
+    setFocusRequest({ target: 'images' });
   };
   const removeDocument = () => {
     if (locked.current) return;
@@ -409,6 +430,7 @@ export function TccEditor({ workId }: { workId?: string }) {
     setDocument(null);
     if (previous?.staged && apiBaseUrl && csrf)
       void discardAttachment(apiBaseUrl, csrf, previous.id).catch(() => {});
+    setFocusRequest({ target: 'file' });
   };
   const addTag = async () => {
     if (
@@ -442,6 +464,7 @@ export function TccEditor({ workId }: { workId?: string }) {
         ...current,
         tagIds: [...new Set([...current.tagIds, tag.id])],
       }));
+      setFields((current) => ({ ...current, tagIds: '' }));
       setNewTag('');
     } catch (error) {
       if (active.current)
@@ -565,6 +588,7 @@ export function TccEditor({ workId }: { workId?: string }) {
                   disabled={busy}
                   onClick={() => {
                     setLumeFailure(null);
+                    setFocusRequest({ target: 'lume' });
                   }}
                 >
                   Voltar ao formulário
@@ -697,6 +721,7 @@ export function TccEditor({ workId }: { workId?: string }) {
             <span>Link do LUME *</span>
             <input
               type="url"
+              ref={lumeInput}
               maxLength={2048}
               value={form.lumeUrl}
               onChange={(event) => update('lumeUrl', event.target.value)}
@@ -786,6 +811,7 @@ export function TccEditor({ workId }: { workId?: string }) {
                             ? [...current.tagIds, tag.id]
                             : current.tagIds.filter((id) => id !== tag.id),
                         }));
+                        setFields((current) => ({ ...current, tagIds: '' }));
                         setSuccess('');
                       }}
                     />
@@ -837,6 +863,12 @@ export function TccEditor({ workId }: { workId?: string }) {
             accept="image/png,image/jpeg,image/webp"
             multiple
             aria-label="Selecionar imagens de demonstração"
+            aria-describedby={
+              ['mediaIds', 'media']
+                .filter((name) => fields[name])
+                .map((name) => `error-${name}`)
+                .join(' ') || undefined
+            }
             onChange={(event) => {
               void upload(event, 'image');
             }}
@@ -845,6 +877,13 @@ export function TccEditor({ workId }: { workId?: string }) {
             <button
               type="button"
               className="editor-secondary"
+              ref={imageButton}
+              aria-describedby={
+                ['mediaIds', 'media']
+                  .filter((name) => fields[name])
+                  .map((name) => `error-${name}`)
+                  .join(' ') || undefined
+              }
               disabled={images.length >= 3}
               onClick={() => imageInput.current?.click()}
             >
@@ -915,6 +954,12 @@ export function TccEditor({ workId }: { workId?: string }) {
               tabIndex={-1}
               accept=".pdf,.docx,.epub"
               aria-label="Selecionar arquivo do trabalho"
+              aria-describedby={
+                ['fileId', 'file']
+                  .filter((name) => fields[name])
+                  .map((name) => `error-${name}`)
+                  .join(' ') || undefined
+              }
               onChange={(event) => {
                 void upload(event, 'document');
               }}
@@ -937,6 +982,13 @@ export function TccEditor({ workId }: { workId?: string }) {
             <button
               type="button"
               className="editor-secondary"
+              ref={fileButton}
+              aria-describedby={
+                ['fileId', 'file']
+                  .filter((name) => fields[name])
+                  .map((name) => `error-${name}`)
+                  .join(' ') || undefined
+              }
               onClick={() => fileInput.current?.click()}
             >
               {document ? 'Substituir arquivo' : 'Anexar arquivo'}

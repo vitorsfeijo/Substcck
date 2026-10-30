@@ -77,11 +77,11 @@ function Home() {
           <div className="hero-actions">
             <button
               className="button button-primary"
-              onClick={() =>
-                document
-                  .getElementById('catalogo')
-                  ?.scrollIntoView({ behavior: 'smooth' })
-              }
+              onClick={() => {
+                const catalog = document.getElementById('catalogo');
+                catalog?.focus({ preventScroll: true });
+                catalog?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               Explorar o catálogo <span aria-hidden="true">↓</span>
             </button>

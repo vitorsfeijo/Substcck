@@ -9,7 +9,7 @@
   --paper: #f6f4ed;
   --ink: #26271f;
   --red: #af392d;
-  --muted: #6b6c61;
+  --muted: #636459;
   --line: #d9d6cc;
 }
 * {
@@ -322,7 +322,7 @@ h2 em {
   text-align: center;
   font-family: Georgia, serif;
   font-style: italic;
-  color: #777264;
+  color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
   margin-top: 3px;

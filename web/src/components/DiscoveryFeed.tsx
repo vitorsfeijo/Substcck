@@ -30,6 +30,7 @@ export function DiscoveryFeed() {
   return (
     <section
       id="catalogo"
+      tabIndex={-1}
       className="catalog section-shell discovery-feed"
       aria-labelledby="catalog-title"
     >
