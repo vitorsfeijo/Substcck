@@ -176,6 +176,7 @@ async function fixture(page: Page) {
       state.views.push(path.split('/')[2]);
       return state.failMetric ? respond({}, 503) : respond({ counted: true });
     }
+    if (path.endsWith('/related')) return respond({ items: [] });
     if (path.startsWith('/tccs/')) {
       if (state.failRead) return respond({}, 503);
       const found = state.works.find(

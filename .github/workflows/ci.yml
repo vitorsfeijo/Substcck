@@ -42,6 +42,8 @@ jobs:
         run: npm run build:api
       - name: Unit and integration tests
         run: npm test
+      - name: Evaluate semantic retrieval against the versioned corpus
+        run: npm run search:evaluate
       - name: Verify migration and persistent database
         run: npm run db:verify
       - name: Build production frontend
@@ -52,7 +54,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Browser tests against the production artifact
         run: npm run test:e2e
-      - name: Verify account publication and discovery flows with an isolated fixture bundle
+      - name: Verify account publication discovery and semantic flows with an isolated fixture bundle
         run: npm run test:e2e:auth
       - name: Package only the validated frontend
         if: inputs.upload_pages_artifact && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

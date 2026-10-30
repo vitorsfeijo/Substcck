@@ -21,6 +21,7 @@ for (const args of [
     'auth.spec.ts',
     'editor.spec.ts',
     'discovery.spec.ts',
+    'semantic.spec.ts',
   ],
 ]) {
   const result = spawnSync(process.execPath, args, { env, stdio: 'inherit' });
