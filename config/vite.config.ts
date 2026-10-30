@@ -9,14 +9,33 @@ export default defineConfig(({ mode }) => {
   return {
     root: resolve(projectRoot, 'web'),
     envDir: projectRoot,
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: 'substcck-public-api',
+        transformIndexHtml() {
+          return [
+            {
+              tag: 'meta',
+              attrs: {
+                name: 'substcck-api-url',
+                content: (env.VITE_API_URL || '').replace(/\/+$/, ''),
+              },
+              injectTo: 'head',
+            },
+          ];
+        },
+      },
+    ],
     base: env.VITE_BASE_PATH || '/Substcck/',
     build: {
       outDir: resolve(
         projectRoot,
         process.env.SUBTCCSTACK_BUILD_TARGET === 'auth-test'
           ? '.cache/build/auth-web'
-          : '.cache/build/web',
+          : process.env.SUBTCCSTACK_BUILD_TARGET === 'integration-test'
+            ? '.cache/build/integration-web'
+            : '.cache/build/web',
       ),
       emptyOutDir: true,
     },

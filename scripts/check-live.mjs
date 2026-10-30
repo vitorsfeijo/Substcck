@@ -2,8 +2,12 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assetPaths } from './check-pages.mjs';
+import { checkApi } from './check-api.mjs';
 
-export async function checkLive(value, { timeoutMs = 55_000 } = {}) {
+export async function checkLive(
+  value,
+  { timeoutMs = 55_000, apiUrl = process.env.VITE_API_URL || '' } = {},
+) {
   assert(value, 'Provide PAGE_URL or pass a site URL as the first argument.');
   const site = new URL(value);
   assert(
@@ -33,6 +37,21 @@ export async function checkLive(value, { timeoutMs = 55_000 } = {}) {
       assert(
         /<div\b[^>]*id=["']root["']/i.test(html),
         'Application root is absent.',
+      );
+      const configuredApi = apiUrl.replace(/\/+$/, '');
+      const metadata = html.match(
+        /<meta\b[^>]*name=["']substcck-api-url["'][^>]*content=["']([^"']*)["']/i,
+      );
+      assert(metadata, 'Published frontend API metadata is absent.');
+      const actualApi = metadata[1]
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+      assert(
+        actualApi === configuredApi,
+        'Published frontend points to a different API configuration.',
       );
       const assets = assetPaths(html);
       assert(
@@ -70,7 +89,14 @@ export async function checkLive(value, { timeoutMs = 55_000 } = {}) {
           `Empty asset: ${url}`,
         );
       }
-      return { url: site.href, assets: assets.length };
+      const remaining = deadline - Date.now();
+      assert(remaining > 0, 'Published site check timed out.');
+      const api = configuredApi
+        ? await checkApi(configuredApi, site.href, {
+            timeoutMs: Math.min(30_000, remaining),
+          })
+        : { status: 'unconfigured' };
+      return { url: site.href, assets: assets.length, api };
     } catch (error) {
       lastError = error;
       const remaining = deadline - Date.now();
@@ -94,4 +120,11 @@ if (
   console.log(
     `Published site verified: ${result.url} (${result.assets} assets).`,
   );
+  if (result.api.status === 'unconfigured')
+    console.warn('Frontend verified; production API is not configured.');
+  else {
+    console.log(`Public API verified: ${result.api.endpoints} endpoints.`);
+    if (result.api.authentication === 'disabled')
+      console.warn('Institutional sign-in remains disabled.');
+  }
 }
