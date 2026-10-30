@@ -16,4 +16,4 @@ COPY --chown=node:node package.json ./
 COPY --chown=node:node server/db ./server/db
 USER node
 EXPOSE 3001
-CMD ["sh", "-c", "node build/server/scripts/migrate.js && node build/server/index.js"]
+CMD ["sh", "-c", "node build/server/scripts/migrate.js && exec node build/server/index.js"]

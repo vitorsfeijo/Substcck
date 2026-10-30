@@ -1,7 +1,9 @@
+# Select infra/render.yaml as Blueprint Path. All data services stay external.
 services:
   - type: web
     name: substcck-api
     runtime: docker
+    plan: free
     dockerfilePath: ./infra/Dockerfile
     dockerContext: .
     healthCheckPath: /api/health
@@ -11,5 +13,26 @@ services:
         value: production
       - key: CORS_ORIGINS
         value: https://vitorsfeijo.github.io
+      - key: FRONTEND_URL
+        value: https://vitorsfeijo.github.io/Substcck/
+      - key: PUBLIC_API_URL
+        sync: false
       - key: DATABASE_URL
+        sync: false
+      # Reading works while institutional registration is pending.
+      # To enable sign-in, set AUTH_MODE=oidc and the OIDC_* server variables
+      # described in .env.example, with PUBLIC_API_URL/auth/callback registered.
+      - key: AUTH_MODE
+        value: disabled
+      - key: STORAGE_DRIVER
+        value: s3
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
         sync: false
