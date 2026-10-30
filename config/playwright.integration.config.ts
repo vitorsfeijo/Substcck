@@ -11,7 +11,15 @@ export default defineConfig({
   timeout: 45000,
   reporter: [
     ['list'],
-    ['json', { outputFile: '.cache/integration-results/results.json' }],
+    [
+      'json',
+      {
+        outputFile: resolve(
+          import.meta.dirname,
+          '../.cache/integration-results/results.json',
+        ),
+      },
+    ],
   ],
   use: {
     baseURL: 'http://127.0.0.1:4174/Substcck/',
